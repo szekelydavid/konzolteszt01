@@ -9,12 +9,13 @@ namespace RogueTutorial
     class GameLoop
     {
 
-        public const int Width = 80;
-        public const int Height = 25;
+        public const int Width = 100;
+        public const int Height = 40;
 
         public int fee;
         public static MapScreen _mapscreen;
         public static Console startingConsole;
+        
   
         private static Player _player { get; set; }
 
@@ -42,25 +43,8 @@ namespace RogueTutorial
         private static void Update(GameTime time)
         {
             CheckPlayerButton();
+            PlayerAnim();
             
-
-
-            if (_player.iranyPL == 1)
-            {
-                _player.pGlyph = 'D';
-            }
-            if (_player.iranyPL == 2)
-            {
-                _player.pGlyph = 'C';
-            }
-            if (_player.iranyPL == 3)
-            {
-                _player.pGlyph = 'E';
-            }
-            if (_player.iranyPL == 0)
-            {
-                _player.pGlyph = 'B';
-            }
         }
 
         private static void CheckPlayerButton()
@@ -106,7 +90,31 @@ namespace RogueTutorial
                 
             }
             _mapscreen.Print(1, 1, _player.iranyPL.ToString());
+            _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
         }
+
+        public static void PlayerAnim()
+        {
+            if (_player.iranyPL == 1)
+            {
+                _player.pGlyph = 'D';
+            }
+            if (_player.iranyPL == 2)
+            {
+                _player.pGlyph = 'C';
+            }
+            if (_player.iranyPL == 3)
+            {
+                _player.pGlyph = 'E';
+            }
+            if (_player.iranyPL == 0)
+            {
+                _player.pGlyph = 'B';
+            }
+            
+        }
+
+
 
         private static void Init()
         {
@@ -139,21 +147,8 @@ namespace RogueTutorial
             // so it will display on screen
             startingConsole.Children.Add(_player);
         }
-        //! ????
-        public static void ChangeDirection()
-        {
-            if (_player.iranyPL == 0) {
-                _player.pGlyph = 'B';
-
-            }
-            if (_player.iranyPL == 1)
-            {
-                _player.pGlyph = 'C';
-
-            }
-            
-        }
+    
+       
         
-
     }
 }
