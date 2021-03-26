@@ -61,7 +61,11 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up))
             {
                 _player.iranyPL = 0;
-                _player.Position += new Point(0, -1);
+                Point newPoint=_player.Position + new Point(0, -1);;
+                if (!(newPoint.Y < 1))
+                {
+                    _player.Position = newPoint;
+                }
             }
 
             // Keyboard movement for Player character: DOWN arrow
@@ -69,7 +73,11 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Down))
             {
                 _player.iranyPL = 2;
-                _player.Position += new Point(0, 1);
+                Point newPoint=_player.Position + new Point(0, 1);
+                if (!(newPoint.Y > 9))
+                {
+                    _player.Position = newPoint;
+                }
             }
 
             // Keyboard movement for Player character: Left arrow
@@ -77,7 +85,11 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Left))
             {
                 _player.iranyPL = 3;
-                _player.Position += new Point(-1, 0);
+                Point newPoint=_player.Position + new Point(-1, 0);;
+                if (!(newPoint.X < 0))
+                {
+                    _player.Position = newPoint;
+                }
             }
 
             // Keyboard movement for Player character: RIGHT arrow
@@ -85,12 +97,17 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Right))
             {
                 _player.iranyPL = 1;
-                _player.Position += new Point(1, 0);
-                
+                Point newPoint=_player.Position + new Point(1, 0);
+                if (!(newPoint.X > 9))
+                {
+                    _player.Position = newPoint;
+                }
                 
             }
             _mapscreen.Print(1, 1, _player.iranyPL.ToString());
             _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
+            _mapscreen.Print(10, 1, _player.Position.X.ToString());
+            _mapscreen.Print(12, 1, _player.Position.Y.ToString());
         }
 
         public static void PlayerAnim()
@@ -121,10 +138,10 @@ namespace RogueTutorial
             
             var fontMaster = SadConsole.Global.LoadFont("Fonts/chess.font");
      
-            var normalSizedFont = fontMaster.GetFont(Font.FontSizes.Four);
+            var bigSizedFont = fontMaster.GetFont(Font.FontSizes.Four);
 
-            startingConsole = new Console(Width, Height, normalSizedFont);
-            startingConsole.SetGlyph(3, 3, 4);
+            startingConsole = new Console(Width, Height, bigSizedFont);
+            //startingConsole.SetGlyph(3, 3, 4);
             
             _mapscreen = new MapScreen();
             startingConsole.Children.Add(_mapscreen);
@@ -139,7 +156,7 @@ namespace RogueTutorial
             // create an instance of player
             _player = new Player();
             _player.Font = normalSizedFontPL;
-            _player.Position = new Point(5, 8);
+            _player.Position = new Point(2, 2);
             _player.pGlyph = 'B';
             _player.Animation.CurrentFrame[0].Background = Color.TransparentBlack;
             _player.Animation.CurrentFrame[0].Foreground = Color.White;
