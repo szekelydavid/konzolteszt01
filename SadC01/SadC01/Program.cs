@@ -44,6 +44,7 @@ namespace RogueTutorial
         {
             CheckPlayerButton();
             PlayerAnim();
+            _mapscreen.animateStars(_mapscreen.animtimer);
             
         }
 
