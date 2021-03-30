@@ -9,18 +9,29 @@ using SadConsole.Themes;
 
 namespace RogueTutorial
 {
-    public class Monster 
+    public abstract class Monster 
     {
-        public void moveOneStep()
+        
+        public char actualGlyph{ get; set; }
+        public int monsterX { get; set; }
+        public int monsterY { get; set; }
+        public string color{ get; set;}
+
+        public virtual void moveOneStep()
         {
         }
 
-        private char actualGlyph;
-        public int X { get; set; }
-        public int Y { get; set; }
+
+        public  virtual void phaseChange(byte b)
+        {
+        }
+
 
         public int iranyMon { get; set; }
-        //! észak: 0 , kelet: 1, dél:2 , nyugat 3
-        
+        //! észak: E , kelet: K, dél:D , nyugat: N
+        public virtual char[,]  moveOneStep  (char[,] grid)
+        {
+            return grid;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -14,21 +15,23 @@ namespace RogueTutorial
     {
       
 
-        private readonly SadConsole.Timer progressTimer;
+        public readonly SadConsole.Timer progressTimer;
         public SadConsole.ScrollingConsole mapConsole;
         public SadConsole.ScrollingConsole gridConsole;
         public SadConsole.Font normalSizedFont = SadConsole.Global.LoadFont("Fonts/CustomTile.font.json").GetFont(SadConsole.Font.FontSizes.One);
         public  int timeSum { get; set; }
         public  int animtimer { get; set; }
         public char[,] gamegrid { get; set; }
+
+        public List<Monster> monsterList { get; set; }
+        
         public MapScreen() : base(100, 40)
         {
             
             timeSum = 0;
             mapConsole = new ControlsConsole(80,38);
-            //mapConsole.Fill(new Rectangle(3, 3, 27, 5), null, Color.Black, 0);
-            mapConsole.Position = new Point(0, 3);
             
+            mapConsole.Position = new Point(0, 3);
             
             Children.Add(mapConsole);
             IsVisible = true;
@@ -38,36 +41,53 @@ namespace RogueTutorial
             
             var fontMasterPL = SadConsole.Global.LoadFont("Fonts/chess.font");
             var normalSizedFontPL = fontMasterPL.GetFont(Font.FontSizes.Four);
+            
             gridConsole = new ScrollingConsole(10, 10,normalSizedFontPL)
             {
                 DefaultBackground = Color.Transparent,
-                //DefaultBackground = Color.Purple,
                 DefaultForeground = Color.White,
             };
             
             
             mapConsole.Children.Add(gridConsole);
             
-            //this.gridConsole.SetGlyph(2, 2, 'x',Color.Yellow);
-            
-            
-            
             progressTimer = new Timer(TimeSpan.FromSeconds(0.5));
             
             progressTimer.TimerElapsed += (timer, e) =>
             { 
                 timeSum++;
+                if (timeSum % 2 == 0)
+                {
+                    updateTheGrid();
+                    foreach (Monster m in monsterList)
+                    {
+                        byte beB = (byte)(timeSum % 4);
+                        m.phaseChange(beB);
+                    }
+                }
+
                 animtimer = (animtimer % 80);
                 animtimer ++;
 
             };
             Components.Add(progressTimer);
-            //mapConsole.SetGlyph(5, 5, 4);
-            //mapConsole.SetGlyph(7, 7, 9);
+            //gridConsole.SetGlyph(5, 5, 'F');
+     
+            monsterList = new List<Monster>();
             
-            gamegrid = new char[10,9];
+            gamegrid = new char[10,10];
+            
             initTheGrid();
+            
+        }
 
+        public void spawnMTest()
+        {
+            var m = new Mosquito(9,3)
+            {
+            };
+            gamegrid[9,3] = 'F';
+            monsterList.Add(m);
         }
 
         public void animateStars(int animtimer)
@@ -85,7 +105,7 @@ namespace RogueTutorial
                     Color myRgbColor = new Color(color, color+((animtimer*4)%200), color+((animtimer*4)%250));
                     this.mapConsole.SetGlyph(x, y, 'x');
                     this.mapConsole.SetForeground(x,y,myRgbColor);
-                    this.mapConsole.SetBackground(x,y,Color.Black);
+                    this.mapConsole.SetBackground(x,y,Color.Transparent);
                     
                 }
             }
@@ -94,11 +114,51 @@ namespace RogueTutorial
         public void initTheGrid()
         {
             for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 9; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     this.gamegrid[i, j] = '0';
                 }
+                
             }
+        }
+
+        public void updateTheGrid()
+        {
+            
+                foreach (Monster m in monsterList)
+                {
+                    gamegrid = m.moveOneStep(gamegrid);
+                }
+            
+        }
+
+        public void renderTheGrid()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 1; j < 10; j++)
+                {
+                    if (gamegrid[i, j] == '0')
+                    {
+                        this.gridConsole.SetGlyph(i, j, '0');
+                        this.gridConsole.SetForeground(i,j,Color.Transparent);
+                        this.gridConsole.SetBackground(i,j,Color.Transparent);
+                    }
+                    else
+                    {
+                        char actualGlyph = gamegrid[i, j];
+                        this.gridConsole.SetGlyph(i, j, actualGlyph);
+                        this.gridConsole.SetForeground(i,j,Color.White);
+                        this.gridConsole.SetBackground(i,j,Color.Transparent);
+                    }
+                }
+            }
+/*
+            this.gridConsole.SetGlyph(2, 2, 'K');
+            this.gridConsole.SetForeground(2,2,Color.White);
+            this.gridConsole.SetBackground(2,2,Color.Transparent);
+*/
+            
         }
 
     }

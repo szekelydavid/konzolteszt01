@@ -13,7 +13,7 @@ namespace RogueTutorial
         public const int Height = 40;
 
         public int fee;
-        public static MapScreen _mapscreen;
+        public static MapScreen _mapscreen{ get; set; }
         public static Console startingConsole;
         
   
@@ -42,13 +42,23 @@ namespace RogueTutorial
 
         private static void Update(GameTime time)
         {
-            CheckPlayerButton();
+            checkPlayerButton();
             PlayerAnim();
             _mapscreen.animateStars(_mapscreen.animtimer);
-            
+
+            //_mapscreen.updateTheGrid();
+
+            _mapscreen.renderTheGrid();
+
+            foreach (Monster m in _mapscreen.monsterList)
+            {
+                string textToP = "X:" + m.monsterX + "Y:" + m.monsterY;
+                _mapscreen.Print(1, 1, textToP);
+
+            }
         }
 
-        private static void CheckPlayerButton()
+        private static void checkPlayerButton()
         {
             // Called each logic update.
             // As an example, we'll use the F5 key to make the game full screen
@@ -105,32 +115,58 @@ namespace RogueTutorial
                 }
                 
             }
+            
+            /*
             _mapscreen.Print(1, 1, _player.iranyPL.ToString());
             _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
             _mapscreen.Print(10, 1, _player.Position.X.ToString());
             _mapscreen.Print(12, 1, _player.Position.Y.ToString());
+            */
         }
 
         public static void PlayerAnim()
         {
-            if (_player.iranyPL == 1)
+            if ((_player.iranyPL == 1)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'D';
             }
-            if (_player.iranyPL == 2)
+            if ((_player.iranyPL == 1)&&((_mapscreen.timeSum%4==3)||(_mapscreen.timeSum%4==0)))
+            {
+                _player.pGlyph = 'T';
+            }
+           
+            if ((_player.iranyPL == 2)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'C';
             }
-            if (_player.iranyPL == 3)
+            if ((_player.iranyPL == 2)&&((_mapscreen.timeSum%4==3)||(_mapscreen.timeSum%4==0)))
+            {
+                _player.pGlyph = 'S';
+            }
+            
+         
+            
+            if ((_player.iranyPL == 3)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'E';
             }
-            if (_player.iranyPL == 0)
+            if ((_player.iranyPL == 3)&&((_mapscreen.timeSum%4==3)||(_mapscreen.timeSum%4==0)))
+            {
+                _player.pGlyph = 'U';
+            }
+            
+            if ((_player.iranyPL == 0)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'B';
             }
+            if ((_player.iranyPL == 0)&&((_mapscreen.timeSum%4==3)||(_mapscreen.timeSum%4==0)))
+            {
+                _player.pGlyph = 'R';
+            }
             
         }
+
+      
 
 
 
@@ -158,13 +194,16 @@ namespace RogueTutorial
             _player = new Player();
             _player.Font = normalSizedFontPL;
             _player.Position = new Point(2, 2);
-            _player.pGlyph = 'B';
+            _player.pGlyph = '5';
             _player.Animation.CurrentFrame[0].Background = Color.TransparentBlack;
             _player.Animation.CurrentFrame[0].Foreground = Color.White;
             // add the player Entity to our only console
             // so it will display on screen
             startingConsole.Children.Add(_player);
+            
+            _mapscreen.spawnMTest();
         }
+        
     
        
         
