@@ -50,12 +50,13 @@ namespace RogueTutorial
 
             _mapscreen.renderTheGrid();
 
+            /*
             foreach (Monster m in _mapscreen.monsterList)
             {
                 string textToP = "X:" + m.monsterX + "Y:" + m.monsterY;
                 _mapscreen.Print(1, 1, textToP);
-
             }
+            */
         }
 
         private static void checkPlayerButton()
@@ -120,8 +121,9 @@ namespace RogueTutorial
             _mapscreen.Print(1, 1, _player.iranyPL.ToString());
             _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
             _mapscreen.Print(10, 1, _player.Position.X.ToString());
-            _mapscreen.Print(12, 1, _player.Position.Y.ToString());
             */
+            _mapscreen.Print(88, 10 ,_player.Position.Y.ToString());
+            
         }
 
         public static void PlayerAnim()

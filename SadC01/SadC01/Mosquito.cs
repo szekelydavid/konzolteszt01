@@ -2,11 +2,11 @@
 using Microsoft.Xna.Framework.Media;
 using RogueTutorial;
 
-namespace SadC01
+namespace RogueTutorial
 {
     public class Mosquito : Monster
     {
-        public char actualGlyph = 'F';
+        public char actualGlyph = 'V';
         private char actualField;
         public int mosquitoX { get; set; }
         public int mosquitoY { get; set; }
@@ -79,7 +79,7 @@ namespace SadC01
                 coorYmoveTo = mosquitoY;
             }
             //grid[8, 8] = actualField;
-            Console.WriteLine(coorXmoveTo.ToString()+" "+coorYmoveTo.ToString());
+            //Console.WriteLine(coorXmoveTo.ToString()+" "+coorYmoveTo.ToString());
             grid[mosquitoX, mosquitoY] = '0';
             
             grid[coorXmoveTo, coorYmoveTo] = actualGlyph;

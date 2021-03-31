@@ -55,7 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BigSaucer.cs" />
-    <Compile Include="Direction.cs" />
+    <Compile Include="Blobtopus.cs" />
+    <Compile Include="Bonus.cs" />
+    <Compile Include="BonusEnergy.cs" />
+    <Compile Include="BonusLife.cs" />
     <Compile Include="MapScreen.cs" />
     <Compile Include="Monster.cs" />
     <Compile Include="Mosquito.cs" />

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Media;
 using RogueTutorial;
 
-namespace SadC01
+namespace RogueTutorial
 {
     public class SmallSaucer : Monster
     {
@@ -80,7 +80,7 @@ namespace SadC01
                 coorXmoveTo = smallSaucerX-1;
                 coorYmoveTo = smallSaucerY;
             }
-            grid[8, 8] = actualField;
+            //grid[8, 8] = actualField;
             grid[smallSaucerX, smallSaucerY] = '0';
             
             grid[coorXmoveTo, coorYmoveTo] = actualGlyph;

@@ -13,17 +13,20 @@ namespace RogueTutorial
         
        public class MapScreen : Console
     {
-      
-
         public readonly SadConsole.Timer progressTimer;
         public SadConsole.ScrollingConsole mapConsole;
         public SadConsole.ScrollingConsole gridConsole;
+        public SadConsole.ScrollingConsole statsConsole;
         public SadConsole.Font normalSizedFont = SadConsole.Global.LoadFont("Fonts/CustomTile.font.json").GetFont(SadConsole.Font.FontSizes.One);
         public  int timeSum { get; set; }
         public  int animtimer { get; set; }
         public char[,] gamegrid { get; set; }
 
         public List <Monster> monsterList { get; set; }
+        public List <Bonus> bonusList { get; set; }
+
+        public int playerLifeCount;
+        public int playerEnergyCount;
         
         public MapScreen() : base(100, 40)
         {
@@ -51,15 +54,27 @@ namespace RogueTutorial
                 DefaultBackground = Color.DarkBlue,
                 DefaultForeground = Color.White,
             };
-            
-            
+            statsConsole = new ScrollingConsole(3, 10,normalSizedFontPL)
+            {
+                DefaultBackground = Color.DodgerBlue,
+                DefaultForeground = Color.White,
+            };
+            statsConsole.Position=new Point(10,3);
             mapConsole.Children.Add(gridConsole);
+            mapConsole.Children.Add(statsConsole);
             
             progressTimer = new Timer(TimeSpan.FromSeconds(0.5));
             
             progressTimer.TimerElapsed += (timer, e) =>
             { 
                 timeSum++;
+                
+                foreach (Bonus b in bonusList)
+                {
+                    byte beB = (byte)(timeSum % 4);
+                    b.phaseChange(beB,gamegrid);
+                }
+                
                 if (timeSum % 2 == 0)
                 {
                     updateTheGrid();
@@ -70,6 +85,7 @@ namespace RogueTutorial
                     }
                 }
 
+                updateTheStats();
                 animtimer = (animtimer % 80);
                 animtimer ++;
 
@@ -78,19 +94,21 @@ namespace RogueTutorial
             //gridConsole.SetGlyph(5, 5, 'F');
      
             monsterList = new List<Monster>();
+            bonusList = new List<Bonus>();
             
             gamegrid = new char[10,10];
-            
             initTheGrid();
-            
-        }
+            playerLifeCount = 3;
+            playerEnergyCount = 9;
 
+        }
+        
         public void spawnMTest()
         {
             //var m = new SmallSaucer(7, 3);
             //var m = new BigSaucer(2, 2);
             //gamegrid[2,2] = 'M';
-            
+            //var m = new Blobtopus(5, 5);
             
             //gamegrid[7,3] = 'L';
             /*
@@ -100,7 +118,21 @@ namespace RogueTutorial
             gamegrid[9,3] = 'F';
             gamegrid[7,2] = '3';
             */
-            monsterList.Add(m);
+            //monsterList.Add(m);
+            
+            
+            
+            var b = new BonusLife(2,2);
+            bonusList.Add(b);
+            
+            gamegrid[2,2] = 'X';
+            
+            var bketto = new BonusEnergy(3,3);
+            bonusList.Add(bketto);
+            
+            gamegrid[3,3] = 'Z';
+            
+            //
         }
 
         /*
@@ -173,8 +205,8 @@ namespace RogueTutorial
             this.gridConsole.SetForeground(2,2,Color.White);
             this.gridConsole.SetBackground(2,2,Color.Transparent);
 */
-            
         }
+        public void updateTheStats();
 
     }
 }
