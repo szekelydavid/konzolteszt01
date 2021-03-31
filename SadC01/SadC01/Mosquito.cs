@@ -78,7 +78,7 @@ namespace SadC01
                 coorXmoveTo = mosquitoX-1;
                 coorYmoveTo = mosquitoY;
             }
-            grid[8, 8] = actualField;
+            //grid[8, 8] = actualField;
             Console.WriteLine(coorXmoveTo.ToString()+" "+coorYmoveTo.ToString());
             grid[mosquitoX, mosquitoY] = '0';
             

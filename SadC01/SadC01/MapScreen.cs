@@ -23,13 +23,17 @@ namespace RogueTutorial
         public  int animtimer { get; set; }
         public char[,] gamegrid { get; set; }
 
-        public List<Monster> monsterList { get; set; }
+        public List <Monster> monsterList { get; set; }
         
         public MapScreen() : base(100, 40)
         {
             
             timeSum = 0;
-            mapConsole = new ControlsConsole(80,38);
+            mapConsole = new ControlsConsole(80,38)
+            {
+                DefaultBackground = Color.Transparent,
+                DefaultForeground = Color.White,
+            };
             
             mapConsole.Position = new Point(0, 3);
             
@@ -44,7 +48,7 @@ namespace RogueTutorial
             
             gridConsole = new ScrollingConsole(10, 10,normalSizedFontPL)
             {
-                DefaultBackground = Color.Transparent,
+                DefaultBackground = Color.DarkBlue,
                 DefaultForeground = Color.White,
             };
             
@@ -83,13 +87,23 @@ namespace RogueTutorial
 
         public void spawnMTest()
         {
+            //var m = new SmallSaucer(7, 3);
+            //var m = new BigSaucer(2, 2);
+            //gamegrid[2,2] = 'M';
+            
+            
+            //gamegrid[7,3] = 'L';
+            /*
             var m = new Mosquito(9,3)
             {
             };
             gamegrid[9,3] = 'F';
+            gamegrid[7,2] = '3';
+            */
             monsterList.Add(m);
         }
 
+        /*
         public void animateStars(int animtimer)
         {
             for (int y = 0; y < 39; y++)
@@ -98,18 +112,19 @@ namespace RogueTutorial
                 {
                     int color = (int)
                     (
-                        animtimer%128.0 + ((animtimer+(128.0)) * Math.Sin(x / 8.0))
+                        animtimer%128 + ((animtimer+(128.0)) * Math.Sin(x / 8.0))
                                         + animtimer+128.0 + (animtimer +(128.0 * Math.Sin(y / 8.0)))
                     ) / 4;
                     
-                    Color myRgbColor = new Color(color, color+((animtimer*4)%200), color+((animtimer*4)%250));
+                    Color myRgbColor = new Color(color*2%120, color+((animtimer*4)%120), color+((animtimer*4)%1200));
                     this.mapConsole.SetGlyph(x, y, 'x');
                     this.mapConsole.SetForeground(x,y,myRgbColor);
-                    this.mapConsole.SetBackground(x,y,Color.Transparent);
+                    this.mapConsole.SetBackground(x,y,myRgbColor);
                     
                 }
             }
         }
+        */
 
         public void initTheGrid()
         {
