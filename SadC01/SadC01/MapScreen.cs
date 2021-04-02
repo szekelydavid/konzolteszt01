@@ -17,22 +17,31 @@ namespace RogueTutorial
         public SadConsole.ScrollingConsole mapConsole;
         public SadConsole.ScrollingConsole gridConsole;
         public SadConsole.ScrollingConsole statsConsole;
-        public SadConsole.Font normalSizedFont = SadConsole.Global.LoadFont("Fonts/CustomTile.font.json").GetFont(SadConsole.Font.FontSizes.One);
+        public SadConsole.ScrollingConsole playerLaserConsole;
+        //public SadConsole.Font normalSizedFont = SadConsole.Global.LoadFont("Fonts/CustomTile.font.json").GetFont(SadConsole.Font.FontSizes.One);
         public  int timeSum { get; set; }
         public  int animtimer { get; set; }
+        //rács, amin a szörnyek vannak
         public char[,] gamegrid { get; set; }
-
+        public byte[,] playerLaserGrid { get; set; }
+        // szörnyek
         public List <Monster> monsterList { get; set; }
+        // bónuszok
         public List <Bonus> bonusList { get; set; }
-
+        //játékos lövései
+        public List <PlayerLaser> playerLaserList { get; set; }
+        
+        //HP
         public int playerLifeCount;
+        //ENERGIA
         public int playerEnergyCount;
         
         public MapScreen() : base(100, 40)
         {
-            
+            //Számláló nullázása
             timeSum = 0;
-            mapConsole = new ControlsConsole(80,38)
+            
+            mapConsole = new ControlsConsole(80,3)
             {
                 DefaultBackground = Color.Transparent,
                 DefaultForeground = Color.White,
@@ -49,26 +58,40 @@ namespace RogueTutorial
             var fontMasterPL = SadConsole.Global.LoadFont("Fonts/chess.font");
             var normalSizedFontPL = fontMasterPL.GetFont(Font.FontSizes.Four);
             
-            gridConsole = new ScrollingConsole(10, 10,normalSizedFontPL)
+            //a szörnyeket megjelenítő és kezelelő konzol inicializálása
+            gridConsole = new ScrollingConsole(10, 9,normalSizedFontPL)
             {
                 DefaultBackground = Color.DarkBlue,
                 DefaultForeground = Color.White,
             };
-            statsConsole = new ScrollingConsole(3, 10,normalSizedFontPL)
+            mapConsole.Children.Add(gridConsole);
+            
+            //játékos lézerlövéseit megjelenítő konzol
+            playerLaserConsole = new ScrollingConsole(10, 9,normalSizedFontPL)
             {
-                DefaultBackground = Color.DodgerBlue,
+                DefaultBackground = Color.Transparent,
                 DefaultForeground = Color.White,
             };
-            statsConsole.Position=new Point(10,3);
-            mapConsole.Children.Add(gridConsole);
+            mapConsole.Children.Add(playerLaserConsole);
+
+            //játékos statisztikákat megjelenítő konzol incializálása
+            var normalSizedFontST = fontMasterPL.GetFont(Font.FontSizes.Two);
+            statsConsole = new ScrollingConsole(6, 20,normalSizedFontST)
+            {
+                DefaultBackground = Color.Transparent,
+                DefaultForeground = Color.White,
+            };
+            statsConsole.Position=new Point(20,3);
+            
             mapConsole.Children.Add(statsConsole);
             
+            //idó-számláló kezelése
             progressTimer = new Timer(TimeSpan.FromSeconds(0.5));
-            
             progressTimer.TimerElapsed += (timer, e) =>
             { 
                 timeSum++;
-                
+                updateTheGridLasers(); 
+                //BÓnuszok animációja
                 foreach (Bonus b in bonusList)
                 {
                     byte beB = (byte)(timeSum % 4);
@@ -77,15 +100,17 @@ namespace RogueTutorial
                 
                 if (timeSum % 2 == 0)
                 {
-                    updateTheGrid();
+                    //szörnyek mozgása
+                    updateTheGridMonsters();
                     foreach (Monster m in monsterList)
                     {
                         byte beB = (byte)(timeSum % 4);
                         m.phaseChange(beB);
                     }
                 }
-
+                //statisztikák aktualizálása
                 updateTheStats();
+                //effekt animáció időzítője
                 animtimer = (animtimer % 80);
                 animtimer ++;
 
@@ -95,11 +120,20 @@ namespace RogueTutorial
      
             monsterList = new List<Monster>();
             bonusList = new List<Bonus>();
-            
-            gamegrid = new char[10,10];
-            initTheGrid();
+            playerLaserList = new List<PlayerLaser>();
+
+            gamegrid = new char[10,9];
+            playerLaserGrid = new byte[10, 9];
+
+            initTheGrids();
+
+            //PlayerLaser laseregy = new PlayerLaser(5,5,0);
+            //playerLaserList.Add(laseregy);
+
             playerLifeCount = 3;
             playerEnergyCount = 9;
+
+            playerLaserGrid[2, 3] = 1;
 
         }
         
@@ -157,36 +191,56 @@ namespace RogueTutorial
             }
         }
         */
-
-        public void initTheGrid()
+        
+        public void initTheGrids()
         {
+            //monsterGrid
             for (int i = 0; i < 10; i++) {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 9; j++)
                 {
                     this.gamegrid[i, j] = '0';
                 }
-                
+            }
+            //playerLaserGrid
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 9; j++)
+                {
+                    this.playerLaserGrid[i, j] = 9;
+                }
             }
         }
 
-        public void updateTheGrid()
+        public void updateTheGridMonsters()
         {
             
                 foreach (Monster m in monsterList)
                 {
                     gamegrid = m.moveOneStep(gamegrid);
                 }
+              
             
         }
+        public void updateTheGridLasers()
+        {
+
+                foreach (PlayerLaser pll in playerLaserList)
+                {
+                    playerLaserGrid= pll.moveOneStep(playerLaserGrid);
+                }
+            //System.Console.WriteLine("UPDATE");
+
+        }
+        
 
         public void renderTheGrid()
         {
             for (int i = 0; i < 10; i++)
             {
-                for (int j = 1; j < 10; j++)
+                for (int j = 1; j < 9; j++)
                 {
                     if (gamegrid[i, j] == '0')
                     {
+
                         this.gridConsole.SetGlyph(i, j, '0');
                         this.gridConsole.SetForeground(i,j,Color.Transparent);
                         this.gridConsole.SetBackground(i,j,Color.Transparent);
@@ -200,13 +254,44 @@ namespace RogueTutorial
                     }
                 }
             }
-/*
-            this.gridConsole.SetGlyph(2, 2, 'K');
-            this.gridConsole.SetForeground(2,2,Color.White);
-            this.gridConsole.SetBackground(2,2,Color.Transparent);
-*/
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (this.playerLaserGrid[i, j] == 9)
+                    {
+                        this.playerLaserConsole.SetGlyph(i, j, '3');
+                        this.playerLaserConsole.SetForeground(i, j, Color.White);
+                        this.playerLaserConsole.SetBackground(i, j, Color.Transparent);
+                    }
+                    if (this.playerLaserGrid[i, j] != 9)
+                    {
+                        this.playerLaserConsole.SetGlyph(i, j, '6');
+                        this.playerLaserConsole.SetForeground(i,j,Color.White);
+                        this.playerLaserConsole.SetBackground(i,j,Color.Transparent); 
+                    }
+                    
+                }
+            }
+            
         }
-        public void updateTheStats();
+
+         public void updateTheStats()
+        {
+            this.statsConsole.SetGlyph(0, 0, 'd');
+            this.statsConsole.SetGlyph(1, 0, '4');
+            this.statsConsole.SetGlyph(2, 0, '4');
+            this.statsConsole.SetGlyph(3, 0, '4');
+            this.statsConsole.SetGlyph(4, 0, '4');
+            this.statsConsole.SetForeground(0,0,Color.White);
+            this.statsConsole.SetBackground(0,0,Color.Transparent);
+            
+            this.statsConsole.SetGlyph(0, 2, '2');
+            this.statsConsole.SetGlyph(1, 2, '>');
+            this.statsConsole.SetGlyph(2, 2, '>');
+            this.statsConsole.SetGlyph(3, 2, '>');
+            this.statsConsole.SetGlyph(4, 2, '>');
+            
+        }
 
     }
 }

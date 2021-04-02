@@ -13,14 +13,14 @@ namespace RogueTutorial
     {
         public int pGlyph { get { return Animation.CurrentFrame[0].Glyph; } set { Animation.CurrentFrame[0].Glyph = value; Animation.IsDirty = true; } }
         Point Position { get; set; }
-        public int X { get; set; }
+        public int X { get ; set; }
         public int Y { get; set; }
 
-        public int iranyPL { get; set; }
+        public byte iranyPL { get; set; }
         // észak: 0 , kelet: 1, dél:2 , nyugat 3
-        public Player() : base(Microsoft.Xna.Framework.Color.Pink, Microsoft.Xna.Framework.Color.Brown, 5) {
+        public Player() : base(Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Transparent, 5) {
             Animation.CurrentFrame[0].Glyph = 'd';
-            Animation.CurrentFrame[0].Foreground = Color.BlueViolet;
+
             iranyPL = 0;
         }
         

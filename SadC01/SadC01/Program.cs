@@ -3,6 +3,7 @@ using SadConsole;
 using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SadC01;
 
 namespace RogueTutorial
 {
@@ -73,7 +74,9 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up))
             {
                 _player.iranyPL = 0;
-                Point newPoint=_player.Position + new Point(0, -1);;
+                _player.Y--;
+                Point newPoint = _player.Position + new Point(0, -1);
+                ;
                 if (!(newPoint.Y < 1))
                 {
                     _player.Position = newPoint;
@@ -85,7 +88,8 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Down))
             {
                 _player.iranyPL = 2;
-                Point newPoint=_player.Position + new Point(0, 1);
+                Point newPoint = _player.Position + new Point(0, 1);
+                _player.Y++;
                 if (!(newPoint.Y > 9))
                 {
                     _player.Position = newPoint;
@@ -97,7 +101,8 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Left))
             {
                 _player.iranyPL = 3;
-                Point newPoint=_player.Position + new Point(-1, 0);;
+                Point newPoint = _player.Position + new Point(-1, 0);
+                _player.X--;
                 if (!(newPoint.X < 0))
                 {
                     _player.Position = newPoint;
@@ -109,22 +114,45 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Right))
             {
                 _player.iranyPL = 1;
+                Point newPoint = _player.Position + new Point(1, 0);
+                _player.X++ ;
+                if (!(newPoint.X > 9))
+                {
+                    _player.Position = newPoint;
+                }
+
+            }
+
+            
+            if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space)){
+
+
+                System.Console.WriteLine("PLAYER X: " + _player.X.ToString() + "Y: " + _player.Y.ToString());
+                System.Console.WriteLine("irány: " + _player.iranyPL.ToString());
+                PlayerLaser laser = new PlayerLaser(_player.X,_player.Y,_player.iranyPL);
+                
+                _mapscreen.playerLaserGrid=laser.placementToTheGrid(_mapscreen.playerLaserGrid);
+                _mapscreen.playerLaserList.Add(laser);
+                /*
                 Point newPoint=_player.Position + new Point(1, 0);
                 if (!(newPoint.X > 9))
                 {
                     _player.Position = newPoint;
                 }
                 
-            }
-            
-            /*
-            _mapscreen.Print(1, 1, _player.iranyPL.ToString());
-            _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
-            _mapscreen.Print(10, 1, _player.Position.X.ToString());
-            */
-            _mapscreen.Print(88, 10 ,_player.Position.Y.ToString());
-            
+                _mapscreen.Print(1, 1, _player.iranyPL.ToString());
+                _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
+                _mapscreen.Print(10, 1, _player.Position.X.ToString());
+                
+                _mapscreen.Print(1, 1, _player.Position.Y.ToString());
+                */
+                
+                System.Console.WriteLine("LASER X:"+laser.playerlaserX.ToString()+"Y:"+ laser.playerlaserY.ToString());
+                System.Console.WriteLine("LASER D:" + laser.Direction.ToString());
+            } 
+        
         }
+
 
         public static void PlayerAnim()
         {
@@ -196,8 +224,10 @@ namespace RogueTutorial
             _player = new Player();
             _player.Font = normalSizedFontPL;
             _player.Position = new Point(2, 2);
+            _player.X = 2;
+            _player.Y = 2;
             _player.pGlyph = '5';
-            _player.Animation.CurrentFrame[0].Background = Color.TransparentBlack;
+            _player.Animation.CurrentFrame[0].Background = Color.Transparent;
             _player.Animation.CurrentFrame[0].Foreground = Color.White;
             // add the player Entity to our only console
             // so it will display on screen
