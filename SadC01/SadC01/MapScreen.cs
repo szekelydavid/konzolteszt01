@@ -23,7 +23,7 @@ namespace RogueTutorial
         public  int animtimer { get; set; }
         //rács, amin a szörnyek vannak
         public char[,] gamegrid { get; set; }
-        public byte[,] playerLaserGrid { get; set; }
+        public int[,] playerLaserGrid { get; set; }
         // szörnyek
         public List <Monster> monsterList { get; set; }
         // bónuszok
@@ -43,7 +43,7 @@ namespace RogueTutorial
             
             mapConsole = new ControlsConsole(80,3)
             {
-                DefaultBackground = Color.Transparent,
+                DefaultBackground = Color.Pink,
                 DefaultForeground = Color.White,
             };
             
@@ -123,7 +123,7 @@ namespace RogueTutorial
             playerLaserList = new List<PlayerLaser>();
 
             gamegrid = new char[10,9];
-            playerLaserGrid = new byte[10, 9];
+            playerLaserGrid = new int[10,9];
 
             initTheGrids();
 

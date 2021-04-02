@@ -16,8 +16,8 @@ namespace RogueTutorial
         public int X { get ; set; }
         public int Y { get; set; }
 
-        public byte iranyPL { get; set; }
-        // észak: 0 , kelet: 1, dél:2 , nyugat 3
+        public int iranyPL { get; set; }
+        //! észak: 0 , kelet: 1, dél:2 , nyugat 3
         public Player() : base(Microsoft.Xna.Framework.Color.White, Microsoft.Xna.Framework.Color.Transparent, 5) {
             Animation.CurrentFrame[0].Glyph = 'd';
 

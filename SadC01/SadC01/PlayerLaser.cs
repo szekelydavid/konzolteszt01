@@ -2,12 +2,12 @@
 {
     public class PlayerLaser
     {
-        public byte Direction;
+        public int Direction;
         public int playerlaserX;
         public int playerlaserY;
         
         
-        public PlayerLaser (int bex,int bey,byte direction) {
+        public PlayerLaser (int bex,int bey, int direction) {
 
             //byte[,]playerlasergrid
             this.playerlaserX = bex;
@@ -36,12 +36,12 @@
             
             
         }
-        public byte[,] placementToTheGrid(byte[,] grid) {
+        public int[,] placementToTheGrid(int[,] grid) {
             grid[playerlaserX, playerlaserY] = this.Direction;
             return grid;
         }
         
-        public  byte[,]  moveOneStep  (byte[,] grid)
+        public  int[,]  moveOneStep  (int[,] grid)
         {            
             
             
