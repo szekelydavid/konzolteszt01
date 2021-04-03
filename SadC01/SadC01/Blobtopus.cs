@@ -14,8 +14,8 @@ namespace RogueTutorial
 
         public int blobtopusX { get; set; }
         public int blobtopusY { get; set; }
-        public int monsterX { get; set; }
-        public int monsterY { get; set; }
+        public override int  monsterX { get; set; }
+        public override int monsterY { get; set; }
 
 
         public Blobtopus(int bex, int bey)
@@ -28,7 +28,7 @@ namespace RogueTutorial
 
         public override void phaseChange(byte inb)
         {
-            if (inb == 2)
+            if (inb == 4)
             {
                 this.actualGlyph = 'K';
             }
@@ -74,6 +74,7 @@ namespace RogueTutorial
             }
 
             //grid[8, 8] = actualField;
+             
             string enableToMove = "zjZ0hX";
             if (enableToMove.Contains(grid[coorXmoveTo, coorYmoveTo]))
             {

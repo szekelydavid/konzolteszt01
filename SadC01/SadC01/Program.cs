@@ -90,7 +90,7 @@ namespace RogueTutorial
                 _player.iranyPL = 2;
                 Point newPoint = _player.Position + new Point(0, 1);
                 _player.Y++;
-                if (!(newPoint.Y > 9))
+                if (!(newPoint.Y > 8))
                 {
                     _player.Position = newPoint;
                 }

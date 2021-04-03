@@ -45,7 +45,7 @@
         {            
             
             
-            grid[playerlaserX, playerlaserY] = 0;
+            //grid[playerlaserX, playerlaserY] = 0;
            
 
             if (Direction == '0')

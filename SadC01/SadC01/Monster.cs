@@ -13,8 +13,8 @@ namespace RogueTutorial
     {
         
         public char actualGlyph{ get; set; }
-        public int monsterX { get; set; }
-        public int monsterY { get; set; }
+        public virtual int monsterX { get; set; }
+        public virtual int monsterY { get; set; }
         public string color{ get; set;}
 
         public virtual void moveOneStep()
