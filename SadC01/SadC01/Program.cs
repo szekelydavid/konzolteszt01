@@ -50,7 +50,8 @@ namespace RogueTutorial
             //_mapscreen.updateTheGrid();
 
             _mapscreen.renderTheGrid();
-
+            string textToP = "X:" + _player.X + "Y:" + _player.Y;
+            System.Console.WriteLine(textToP);
             /*
             foreach (Monster m in _mapscreen.monsterList)
             {
@@ -74,12 +75,13 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up))
             {
                 _player.iranyPL = 0;
-                _player.Y--;
+                
                 Point newPoint = _player.Position + new Point(0, -1);
                 ;
-                if (!(newPoint.Y < 1))
+                if (!(newPoint.Y < 0))
                 {
                     _player.Position = newPoint;
+                    _player.Y--;
                 }
             }
 
@@ -89,10 +91,11 @@ namespace RogueTutorial
             {
                 _player.iranyPL = 2;
                 Point newPoint = _player.Position + new Point(0, 1);
-                _player.Y++;
+                
                 if (!(newPoint.Y > 8))
                 {
                     _player.Position = newPoint;
+                    _player.Y++;
                 }
             }
 
@@ -102,10 +105,11 @@ namespace RogueTutorial
             {
                 _player.iranyPL = 3;
                 Point newPoint = _player.Position + new Point(-1, 0);
-                _player.X--;
+                
                 if (!(newPoint.X < 0))
                 {
                     _player.Position = newPoint;
+                    _player.X--;
                 }
             }
 
@@ -115,10 +119,11 @@ namespace RogueTutorial
             {
                 _player.iranyPL = 1;
                 Point newPoint = _player.Position + new Point(1, 0);
-                _player.X++ ;
+                
                 if (!(newPoint.X > 9))
                 {
                     _player.Position = newPoint;
+                    _player.X++;
                 }
 
             }

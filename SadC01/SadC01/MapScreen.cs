@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -97,7 +98,10 @@ namespace RogueTutorial
                     byte beB = (byte)(timeSum % 4);
                     b.phaseChange(beB, gamegrid);
                 }
-
+                if (timeSum % 4 == 0) 
+                {
+                    updateTheGridExplosions();
+                }
                 if (timeSum % 4 == 0)
                 {
                     //szörnyek mozgása
@@ -133,7 +137,7 @@ namespace RogueTutorial
 
             playerLifeCount = 3;
             playerEnergyCount = 9;
-            
+
             // ! TESZT
             playerLaserGrid[4, 4] = 3;
 
@@ -146,7 +150,7 @@ namespace RogueTutorial
             //gamegrid[2,2] = 'M';
             var m = new Blobtopus(5, 5);
 
-            gamegrid[5,5] = 'J';
+            gamegrid[5, 5] = 'J';
             /*
             var m = new Mosquito(9,3)
             {
@@ -155,7 +159,7 @@ namespace RogueTutorial
             gamegrid[7,2] = '3';
             */
             monsterList.Add(m);
-           //monsterList.Remove(m);
+            //monsterList.Remove(m);
 
             /*
             var b = new BonusLife(2, 2);
@@ -211,6 +215,34 @@ namespace RogueTutorial
                 }
             }
         }
+        public void updateTheGridExplosions() {
+            
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+
+                    if (gamegrid[i, j] == 'G')
+                    {
+                        this.gridConsole.SetGlyph(i, j, 'W');
+                        this.gridConsole.SetForeground(i, j, Color.White);
+                        this.gridConsole.SetBackground(i, j, Color.Transparent);
+                        gamegrid[i, j] = 'W';
+                    }
+                    else if(gamegrid[i, j] == 'W')
+                    {
+                        this.gridConsole.SetGlyph(i, j, '0');
+                        this.gridConsole.SetForeground(i, j, Color.Transparent);
+                        this.gridConsole.SetBackground(i, j, Color.Transparent);
+                        gamegrid[i, j] = '0';
+                    }
+
+            
+                }
+            }
+
+               
+        }
 
         public void updateTheGridMonsters()
         {
@@ -222,10 +254,39 @@ namespace RogueTutorial
 
 
         }
+
+        public bool isItHit(int x, int y) 
+        {
+            string enemiesString = "GWJKL\\M]N";
+            
+            char targetChar = gamegrid[x, y];
+            if (enemiesString.Contains(targetChar)) {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+        }
+        public void removeMonster(int bex, int bey)
+        {
+            for (int mnstcount = monsterList.Count - 1; mnstcount >= 0; mnstcount--)
+            {
+                System.Console.WriteLine(monsterList[mnstcount]);
+                if ((monsterList[mnstcount].monsterX == bex) && ((monsterList[mnstcount].monsterY == bey)))
+                {
+                    monsterList.RemoveAt(mnstcount);
+                    gamegrid[bex, bey] = 'G';
+                }
+            }
+        }
+
+
         public void updateTheGridLasers()
         {
             //playerLaserGrid[6, 4] = 1;
             //System.Console.WriteLine( "cycle");
+
             int[,] returngrid = new int[10, 10];
             for (int i = 0; i < 10; i++)
             {
@@ -243,37 +304,15 @@ namespace RogueTutorial
                     if (playerLaserGrid[i, j] == 0)
                     {
 
-                        //System.Console.WriteLine("f0");
-                        foreach (Monster m in monsterList)
-                        {
-                            System.Console.WriteLine(m.monsterY.ToString());
-                        }
-
                         if ((j-1) >= 0)
                         {
-                            if ((gamegrid[i, j - 1] == 'J') || (gamegrid[i, j - 1] == 'K')) 
+                           
+                            if(isItHit(i, j - 1))
                             {
                                 System.Console.WriteLine("TALALT");
-                                /*
-                                foreach (Monster m in monsterList)
-                                {
-                                    if ((m.monsterX == i) && (m.monsterY == j - 1)) {
-                                        System.Console.WriteLine("remove");
-                                        monsterList.Remove(m);
-                                    }
-                                }
-                                */
-                                for (int mnstcount = monsterList.Count - 1; mnstcount >= 0; mnstcount--)
-                                {
-                                    System.Console.WriteLine(monsterList[mnstcount]);
-                                    if ((monsterList[mnstcount].monsterX == i) && ((monsterList[mnstcount].monsterY == j-1)))
-                                    {
-                                        monsterList.RemoveAt(mnstcount);
-                                    }
-                                }
+                            
+                                removeMonster(i, j - 1);
 
-                                gamegrid[i, j - 1] = 'G';
-                                returngrid[i, j - 1] = 9;
                             }
                             returngrid[i, j-1] = 0;
                         }
@@ -282,19 +321,33 @@ namespace RogueTutorial
 
                     if (playerLaserGrid[i, j] == 1)
                     {
-                        System.Console.WriteLine("f1");
+                        //System.Console.WriteLine("f1");
                         if ((i + 1) < 10) {
-                            returngrid[i + 1, j] = 1;
-                            
+                            if (isItHit(i+1, j ))
+                            {
+                                System.Console.WriteLine("TALALT");
+
+                                removeMonster(i+1, j );
+
+                            }
+                            returngrid[i + 1, j] = 1; 
                         }
                         
                     }
 
                     if (playerLaserGrid[i, j] == 2)
                     {
-                        System.Console.WriteLine("f2");
+                        //System.Console.WriteLine("f2");
                         if ((j+1 ) < 10)
                         {
+                            if (isItHit(i, j + 1))
+                            {
+                                System.Console.WriteLine("TALALT");
+
+                                removeMonster(i, j + 1);
+
+                            }
+
                             returngrid[i , j+1] = 2;
 
                         }
@@ -303,9 +356,17 @@ namespace RogueTutorial
 
                     if (playerLaserGrid[i, j] == 3)
                     {
-                        System.Console.WriteLine("f3");
+                        //System.Console.WriteLine("f3");
                         if ((i - 1) >= 0)
                         {
+                            if (isItHit(i-1, j ))
+                            {
+                                System.Console.WriteLine("TALALT");
+
+                                removeMonster(i-1, j );
+
+                            }
+
                             returngrid[i -1, j] = 3;
 
                         }
@@ -314,10 +375,6 @@ namespace RogueTutorial
 
                     //System.Console.WriteLine("UPDATE");
 
-                    /*this.playerLaserConsole.SetGlyph(i+1, j, '6');
-                    this.playerLaserConsole.SetForeground(i, j, Color.White);
-                    this.playerLaserConsole.SetBackground(i, j, Color.Transparent);
-                    */
                 }
             }
             //! átírja a rácsot
@@ -338,6 +395,7 @@ namespace RogueTutorial
                         this.gridConsole.SetForeground(i, j, Color.Transparent);
                         this.gridConsole.SetBackground(i, j, Color.Transparent);
                     }
+                    
                     else
                     {
                         char actualGlyph = gamegrid[i, j];
