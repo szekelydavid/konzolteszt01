@@ -10,8 +10,8 @@ namespace RogueTutorial
         private char actualField;
         public int mosquitoX { get; set; }
         public int mosquitoY { get; set; }
-        public int monsterX { get; set; }
-        public int monsterY { get; set; }
+        public override int monsterX { get; set; }
+        public override int monsterY { get; set; }
         
         private char[,] mozgasMinta = new char[9, 10]
         {
@@ -23,7 +23,7 @@ namespace RogueTutorial
             {'D', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N'},
             {'K', 'K', 'K', 'K', 'K', 'K', 'K', 'K', 'K', 'D'},
             {'D', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N'},
-            {'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'}
+            {'X', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'}
             
         };   
         
@@ -37,12 +37,13 @@ namespace RogueTutorial
 
         public override void phaseChange(byte inb)
         {
-            if (inb == 2)
+            Console.WriteLine(monsterX);
+            if (inb == 0)
             {
                 this.actualGlyph = 'F';
             }
-            
-            if (inb == 0)
+            Console.WriteLine(monsterY);
+            if (inb == 4)
             {
                 this.actualGlyph = 'V';
             }
@@ -78,11 +79,25 @@ namespace RogueTutorial
                 coorXmoveTo = mosquitoX-1;
                 coorYmoveTo = mosquitoY;
             }
+
+            if (actualField == 'X')
+            {
+                coorXmoveTo = mosquitoX;
+                coorYmoveTo = mosquitoY;
+                
+            }
             //grid[8, 8] = actualField;
             //Console.WriteLine(coorXmoveTo.ToString()+" "+coorYmoveTo.ToString());
-            grid[mosquitoX, mosquitoY] = '0';
+            if (actualField == 'X')
+            {
+                grid[mosquitoX, mosquitoY] = '?';
+            }
+            else 
+            {
+                grid[mosquitoX, mosquitoY] = '0';
+                grid[coorXmoveTo, coorYmoveTo] = actualGlyph;
+            }
             
-            grid[coorXmoveTo, coorYmoveTo] = actualGlyph;
             
             this.mosquitoX = coorXmoveTo;
             this.mosquitoY = coorYmoveTo;

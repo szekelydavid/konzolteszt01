@@ -113,8 +113,17 @@ namespace RogueTutorial
                     }
                 }
 
-                //statisztikák aktualizálása
-                updateTheStats();
+                if (timeSum % 4 == 0) {
+                    for (int j = 0; j < 9; j++) 
+                    {
+                        for (int i = 0; i < 10; i++)
+                        { System.Console.Write(gamegrid[i,j]+" "); }
+                        System.Console.Write("\n");
+                    }
+                }
+
+                    //statisztikák aktualizálása
+                    updateTheStats();
                 //effekt animáció időzítője
                 animtimer = (animtimer % 80);
                 animtimer++;
@@ -148,16 +157,16 @@ namespace RogueTutorial
             //var m = new SmallSaucer(7, 3);
             //var m = new BigSaucer(2, 2);
             //gamegrid[2,2] = 'M';
-            var m = new Blobtopus(5, 5);
+            //var m = new Blobtopus(5, 5);
 
-            gamegrid[5, 5] = 'J';
-            /*
-            var m = new Mosquito(9,3)
-            {
-            };
-            gamegrid[9,3] = 'F';
-            gamegrid[7,2] = '3';
-            */
+            // gamegrid[5, 5] = 'J';
+
+            var m = new Mosquito(8, 7);
+            
+
+            gamegrid[8,7] = 'F';
+            //gamegrid[7,2] = '3';
+            //*/
             monsterList.Add(m);
             //monsterList.Remove(m);
 
@@ -253,11 +262,12 @@ namespace RogueTutorial
             }
 
 
+
         }
 
         public bool isItHit(int x, int y) 
         {
-            string enemiesString = "GWJKL\\M]N";
+            string enemiesString = "GFVWJKL\\M]N";
             
             char targetChar = gamegrid[x, y];
             if (enemiesString.Contains(targetChar)) {
@@ -272,9 +282,14 @@ namespace RogueTutorial
         {
             for (int mnstcount = monsterList.Count - 1; mnstcount >= 0; mnstcount--)
             {
+                /*
                 System.Console.WriteLine(monsterList[mnstcount]);
+                System.Console.WriteLine("MX " + monsterList[mnstcount].monsterX);
+                System.Console.WriteLine("MY" + monsterList[mnstcount].monsterY);
+                */
                 if ((monsterList[mnstcount].monsterX == bex) && ((monsterList[mnstcount].monsterY == bey)))
                 {
+                    System.Console.WriteLine("remove");
                     monsterList.RemoveAt(mnstcount);
                     gamegrid[bex, bey] = 'G';
                 }
@@ -287,17 +302,17 @@ namespace RogueTutorial
             //playerLaserGrid[6, 4] = 1;
             //System.Console.WriteLine( "cycle");
 
-            int[,] returngrid = new int[10, 10];
+            int[,] returngrid = new int[10, 9];
             for (int i = 0; i < 10; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 9; j++)
                 {
                     returngrid[i, j] = 9;
                 }
             }
             for (int i = 0; i < 10; i++)
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 9; j++)
                 {
                     
 
@@ -306,15 +321,18 @@ namespace RogueTutorial
 
                         if ((j-1) >= 0)
                         {
-                           
-                            if(isItHit(i, j - 1))
+
+                            if (isItHit(i, j - 1))
                             {
                                 System.Console.WriteLine("TALALT");
-                            
-                                removeMonster(i, j - 1);
 
+                                removeMonster(i, j - 1);
+                                returngrid[i, j-1] = 9;
                             }
-                            returngrid[i, j-1] = 0;
+                            else
+                            {
+                                returngrid[i, j-1] = 0;
+                            }
                         }
                         
                     }
@@ -323,33 +341,39 @@ namespace RogueTutorial
                     {
                         //System.Console.WriteLine("f1");
                         if ((i + 1) < 10) {
-                            if (isItHit(i+1, j ))
+                            if (isItHit(i + 1, j))
                             {
                                 System.Console.WriteLine("TALALT");
 
-                                removeMonster(i+1, j );
+                                removeMonster(i + 1, j);
+                                returngrid[i + 1, j] = 9;
 
                             }
-                            returngrid[i + 1, j] = 1; 
+                            else
+                            {
+                                returngrid[i + 1, j] = 1;
+                            }
                         }
                         
                     }
 
                     if (playerLaserGrid[i, j] == 2)
                     {
+                        System.Console.WriteLine(j);
                         //System.Console.WriteLine("f2");
-                        if ((j+1 ) < 10)
+                        if ((j+1 ) < 9)
                         {
                             if (isItHit(i, j + 1))
                             {
                                 System.Console.WriteLine("TALALT");
 
                                 removeMonster(i, j + 1);
-
+                                returngrid[i, j + 1] = 9;
                             }
-
-                            returngrid[i , j+1] = 2;
-
+                            else
+                            {
+                                returngrid[i, j + 1] = 2;
+                            }
                         }
                         
                     }
@@ -359,16 +383,17 @@ namespace RogueTutorial
                         //System.Console.WriteLine("f3");
                         if ((i - 1) >= 0)
                         {
-                            if (isItHit(i-1, j ))
+                            if (isItHit(i - 1, j))
                             {
                                 System.Console.WriteLine("TALALT");
 
-                                removeMonster(i-1, j );
-
+                                removeMonster(i - 1, j);
+                                returngrid[i - 1, j] = 0;
                             }
-
-                            returngrid[i -1, j] = 3;
-
+                            else
+                            {
+                                returngrid[i - 1, j] = 3;
+                            }
                         }
                         
                     }
@@ -386,8 +411,13 @@ namespace RogueTutorial
         {
             for (int i = 0; i < 10; i++)
             {
-                for (int j = 1; j < 9; j++)
+                for (int j = 0; j < 9; j++)
                 {
+                    if (gamegrid[i, j] == '?'){
+                        
+                        removeMonster(i, j);
+                        gamegrid[i, j] = '0';
+                    }
                     if (gamegrid[i, j] == '0')
                     {
 

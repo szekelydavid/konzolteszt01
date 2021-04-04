@@ -50,8 +50,8 @@ namespace RogueTutorial
             //_mapscreen.updateTheGrid();
 
             _mapscreen.renderTheGrid();
-            string textToP = "X:" + _player.X + "Y:" + _player.Y;
-            System.Console.WriteLine(textToP);
+            //string textToP = "X:" + _player.X + "Y:" + _player.Y;
+            //System.Console.WriteLine(textToP);
             /*
             foreach (Monster m in _mapscreen.monsterList)
             {
