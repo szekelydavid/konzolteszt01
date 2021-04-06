@@ -9,12 +9,13 @@ using SadConsole.Themes;
 
 namespace RogueTutorial
 {
-    public abstract class Monster 
+    public abstract class Monster
     {
-        
+
         public char actualGlyph{ get; set; }
         public virtual int monsterX { get; set; }
         public virtual int monsterY { get; set; }
+        public virtual int plusScore { get; set; }
         public string color{ get; set;}
 
         public virtual void moveOneStep()

@@ -14,6 +14,8 @@ namespace RogueTutorial
         public override int monsterX { get; set; }
         public override int monsterY { get; set; }
 
+        public override int plusScore { get; set; }
+
         private char[,] mozgasMinta = new char[9, 10]
         {
             {'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'},
@@ -34,6 +36,7 @@ namespace RogueTutorial
             this.monsterY = bey;
             mosquitoX = bex;
             mosquitoY = bey;
+            plusScore = 10;
 
         }
 

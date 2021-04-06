@@ -17,6 +17,7 @@ namespace RogueTutorial
         public override int  monsterX { get; set; }
         public override int monsterY { get; set; }
 
+        public override int plusScore { get; set; }
 
         public Blobtopus(int bex, int bey)
         {
@@ -24,6 +25,7 @@ namespace RogueTutorial
             this.monsterY = bey;
             blobtopusX = bex;
             blobtopusY = bey;
+            plusScore = 15;
         }
 
         public override void phaseChange(byte inb)
@@ -63,7 +65,7 @@ namespace RogueTutorial
             {
                 if (blobtopusX + 1 < 10) { coorXmoveTo = blobtopusX + 1; }
                 else { coorXmoveTo = blobtopusX - 1; }
-                
+
                 coorYmoveTo = blobtopusY;
             }
 
@@ -72,7 +74,7 @@ namespace RogueTutorial
                 if (blobtopusY + 1 < 9) { coorYmoveTo = blobtopusY + 1; }
                 else { coorYmoveTo = blobtopusY - 1; }
                 coorXmoveTo = blobtopusX;
-                
+
             }
 
             if (irany == 3)
@@ -83,7 +85,7 @@ namespace RogueTutorial
             }
 
             //grid[8, 8] = actualField;
-             
+
             string enableToMove = "zjZ0hX";
             if (enableToMove.Contains(grid[coorXmoveTo, coorYmoveTo]))
             {

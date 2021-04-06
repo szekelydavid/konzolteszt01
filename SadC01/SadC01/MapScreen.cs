@@ -32,11 +32,12 @@ namespace RogueTutorial
         //játékos lövései
         //public List<PlayerLaser> playerLaserList { get; set; }
 
-        //HP
+        //! HP
         public int playerLifeCount { get; set; }
-        //ENERGIA
+        //! ENERGIA
         public int playerEnergyCount { get; set; }
-
+        //! PLAYER SCORE
+        public int playerScore { get; set; }
         public MapScreen() : base(100, 40)
         {
             //! Számláló nullázása
@@ -86,10 +87,23 @@ namespace RogueTutorial
 
             mapConsole.Children.Add(statsConsole);
 
+            //! Pontokat megjelenítő konzol
+            var fontmasterIBM = SadConsole.Global.LoadFont("Fonts/IBM.font");
+            var doublesizedfontIBM = fontmasterIBM.GetFont(Font.FontSizes.Two);
+            var scoreConsole = new ScrollingConsole(10, 2, doublesizedfontIBM)
+            {
+                DefaultBackground = Color.Black,
+                DefaultForeground = Color.White,
+            };
+            scoreConsole.Position = new Point(2, 5);
+            statsConsole.Children.Add(scoreConsole);
+            scoreConsole.Print(0, 0, "  SCORE:");
+            scoreConsole.Print(0, 1,"  "+ playerScore.ToString());
+
 
             //! _____ISMÉTLŐDŐ CIKLUS___
 
-            //! idő-számláló kezelése
+            //! idő-számláló kezelése ⌛
             //! _____UPDATEK_______
 
             progressTimer = new Timer(TimeSpan.FromSeconds(0.25));
@@ -117,7 +131,7 @@ namespace RogueTutorial
                         m.phaseChange(beB);
                     }
                 }
-                
+
                 if (timeSum % 4 == 0)
                 {
                     /*
@@ -153,9 +167,17 @@ namespace RogueTutorial
             initTheGrids();
 
             //! ________________________DATA
-            //! Player adatok inicaializálása
+            //! Player adatok inicaializálása ÉLET|ENERGIA  ❤️ ⚡
+
             playerLifeCount = 4;
-            playerEnergyCount = 9;
+            playerEnergyCount = 12;
+
+            //! ________________________DATA
+            //! PONTSZÁM 🎖️
+            playerScore = 0;
+
+            //! ________________________DATA
+            //! Player adatok inicaializálása ÉLET|ENERGIA  ❤️ ⚡
 
             // ! TESZT
             playerLaserGrid[4, 4] = 3;
@@ -163,7 +185,7 @@ namespace RogueTutorial
 
         }
 
-        //! ______MONSTER SPAWNOK___
+        //! ______MONSTER SPAWNOK___ 🛸
         public void spawnBlobptosaurus()
         {
             Random rnd = new Random();
@@ -274,12 +296,10 @@ namespace RogueTutorial
                         animtimer%128 + ((animtimer+(128.0)) * Math.Sin(x / 8.0))
                                         + animtimer+128.0 + (animtimer +(128.0 * Math.Sin(y / 8.0)))
                     ) / 4;
-                    
                     Color myRgbColor = new Color(color*2%120, color+((animtimer*4)%120), color+((animtimer*4)%1200));
                     this.mapConsole.SetGlyph(x, y, 'x');
                     this.mapConsole.SetForeground(x,y,myRgbColor);
                     this.mapConsole.SetBackground(x,y,myRgbColor);
-                    
                 }
             }
         }
@@ -367,6 +387,10 @@ namespace RogueTutorial
                 if ((monsterList[mnstcount].monsterX == bex) && ((monsterList[mnstcount].monsterY == bey)))
                 {
                     System.Console.WriteLine("remove");
+                    playerScore += monsterList[mnstcount].plusScore;
+                    //! TESZT
+                    System.Console.WriteLine("SCORE:" + playerScore);
+
                     monsterList.RemoveAt(mnstcount);
                     gamegrid[bex, bey] = 'G';
                 }
@@ -442,7 +466,6 @@ namespace RogueTutorial
                             if (isItHit(i, j + 1))
                             {
                                 System.Console.WriteLine("TALALT");
-
                                 removeMonster(i, j + 1);
                                 returngrid[i, j + 1] = 9;
                             }
@@ -451,7 +474,6 @@ namespace RogueTutorial
                                 returngrid[i, j + 1] = 2;
                             }
                         }
-
                     }
 
                     if (playerLaserGrid[i, j] == 3)
@@ -462,7 +484,6 @@ namespace RogueTutorial
                             if (isItHit(i - 1, j))
                             {
                                 System.Console.WriteLine("TALALT");
-
                                 removeMonster(i - 1, j);
                                 returngrid[i - 1, j] = 0;
                             }
@@ -471,11 +492,8 @@ namespace RogueTutorial
                                 returngrid[i - 1, j] = 3;
                             }
                         }
-
                     }
-
                     //System.Console.WriteLine("UPDATE");
-
                 }
             }
             //! átírja a rácsot
@@ -491,18 +509,15 @@ namespace RogueTutorial
                 {
                     if (gamegrid[i, j] == '?')
                     {
-
                         removeMonster(i, j);
                         gamegrid[i, j] = '0';
                     }
                     if (gamegrid[i, j] == '0')
                     {
-
                         this.gridConsole.SetGlyph(i, j, '0');
                         this.gridConsole.SetForeground(i, j, Color.Transparent);
                         this.gridConsole.SetBackground(i, j, Color.Transparent);
                     }
-
                     else
                     {
                         char actualGlyph = gamegrid[i, j];
@@ -541,12 +556,15 @@ namespace RogueTutorial
             //statsConsole.Fill(new Rectangle(0, 0, 6, 20), Color.White, Color.Navy, 0, 0);
             //! ÉLETEK | SZÍVECSKÉK
 
-               
+
                 //! IKoN AZ ELEJÉN
                 this.statsConsole.SetGlyph(1, 0, 'd');
 
             //! SZÍVEK
-            if (playerLifeCount == 0)
+            if (playerLifeCount > 4) { playerLifeCount = 4; }
+
+
+                if (playerLifeCount == 0)
             {
                 this.statsConsole.SetGlyph(2, 0, '8', Color.White, Color.Black);
                 this.statsConsole.SetGlyph(3, 0, '0', Color.Black, Color.Black);
@@ -554,13 +572,13 @@ namespace RogueTutorial
                 this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
 
             }
-            if (playerLifeCount == 1) 
-                { 
+            if (playerLifeCount == 1)
+                {
                     this.statsConsole.SetGlyph(2, 0, '4', Color.White, Color.Black);
                     this.statsConsole.SetGlyph(3, 0, '0', Color.Black, Color.Black);
                     this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
                     this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
-                    
+
                 }
                 if (playerLifeCount == 2)
                 {
@@ -586,13 +604,113 @@ namespace RogueTutorial
                     this.statsConsole.SetGlyph(5, 0, '4', Color.White, Color.Black);
 
                 }
-           
-                
-            
+
+
+
             //this.statsConsole.SetForeground(0, 0, Color.White);
 
-            //! ENERGIA | 
+            //! ENERGIA |
+            //! IKON AZ ELEJÉN
             this.statsConsole.SetGlyph(1, 2, '2');
+
+            if (playerEnergyCount > 12) { playerEnergyCount = 12; }
+            if (playerEnergyCount == 12)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Green, Color.Black);
+            }
+            if (playerEnergyCount  ==11)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>',Color.Orange,Color.Black);
+            }
+            if (playerEnergyCount == 10)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Red, Color.Black);
+            }
+
+            if (playerEnergyCount == 9)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 8)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Orange, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+
+            if (playerEnergyCount == 7)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Red, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+
+            if (playerEnergyCount == 6)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 5)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.Orange, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 4)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.Red, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 3)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.YellowGreen, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 2)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.Orange, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 1)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.Red, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+            if (playerEnergyCount == 0)
+            {
+                this.statsConsole.SetGlyph(2, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(3, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(4, 2, '>', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 2, '>', Color.Black, Color.Black);
+            }
+
+
+
             this.statsConsole.SetGlyph(2, 2, '>');
             this.statsConsole.SetGlyph(3, 2, '>');
             this.statsConsole.SetGlyph(4, 2, '>');

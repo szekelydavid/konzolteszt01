@@ -18,8 +18,8 @@ namespace RogueTutorial
         public int fee;
         public static MapScreen _mapscreen{ get; set; }
         public static Console startingConsole;
-        
-  
+
+
         private static Player _player { get; set; }
         public static int PLvillogkezd { get; set; }
 
@@ -50,7 +50,7 @@ namespace RogueTutorial
             PlayerAnim();
             villogAnim(_mapscreen.timeSum);
             //System.Console.WriteLine("TS:" + _mapscreen.timeSum);
-            
+
 
             //_mapscreen.animateStars(_mapscreen.animtimer);
 
@@ -83,7 +83,7 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Up))
             {
                 _player.iranyPL = 0;
-                
+
                 Point newPoint = _player.Position + new Point(0, -1);
                 ;
                 if (!(newPoint.Y < 0))
@@ -99,7 +99,7 @@ namespace RogueTutorial
             {
                 _player.iranyPL = 2;
                 Point newPoint = _player.Position + new Point(0, 1);
-                
+
                 if (!(newPoint.Y > 8))
                 {
                     _player.Position = newPoint;
@@ -113,7 +113,7 @@ namespace RogueTutorial
             {
                 _player.iranyPL = 3;
                 Point newPoint = _player.Position + new Point(-1, 0);
-                
+
                 if (!(newPoint.X < 0))
                 {
                     _player.Position = newPoint;
@@ -127,7 +127,7 @@ namespace RogueTutorial
             {
                 _player.iranyPL = 1;
                 Point newPoint = _player.Position + new Point(1, 0);
-                
+
                 if (!(newPoint.X > 9))
                 {
                     _player.Position = newPoint;
@@ -142,6 +142,9 @@ namespace RogueTutorial
                 //System.Console.WriteLine("PLAYER X: " + _player.X.ToString() + "Y: " + _player.Y.ToString());
                 //System.Console.WriteLine("irány: " + _player.iranyPL.ToString());
                 playerLaserGenerate(_player.X, _player.Y, _player.iranyPL);
+
+                _mapscreen.playerEnergyCount--;
+
                 //PlayerLaser laser = new PlayerLaser(_player.X,_player.Y,_player.iranyPL);
 
                 //_mapscreen.playerLaserGrid=laser.placementToTheGrid(_mapscreen.playerLaserGrid);
@@ -152,18 +155,18 @@ namespace RogueTutorial
                 {
                     _player.Position = newPoint;
                 }
-                
+
                 _mapscreen.Print(1, 1, _player.iranyPL.ToString());
                 _mapscreen.Print(5, 1, _mapscreen.timeSum.ToString());
                 _mapscreen.Print(10, 1, _player.Position.X.ToString());
-                
+
                 _mapscreen.Print(1, 1, _player.Position.Y.ToString());
                 */
 
                 //System.Console.WriteLine("LASER X:"+laser.playerlaserX.ToString()+"Y:"+ laser.playerlaserY.ToString());
                 //System.Console.WriteLine("LASER D:" + laser.Direction.ToString());
-            } 
-        
+            }
+
         }
 
         public static void playerHitsMonster()
@@ -175,14 +178,14 @@ namespace RogueTutorial
                 _mapscreen.playerLifeCount--;
                 System.Console.WriteLine("PL_LIFE: "+_mapscreen.playerLifeCount);
                 PLvillogkezd = _mapscreen.timeSum;
-               
+
                 _player.Animation.CurrentFrame[0].Foreground = Color.IndianRed;
             }
         }
         public static void villogAnim(int INtimesum)
         {
             //System.Console.WriteLine(INtimesum - PLvillogkezd);
-            if (INtimesum - PLvillogkezd > 8) 
+            if (INtimesum - PLvillogkezd > 8)
             {
                 _player.Animation.CurrentFrame[0].Foreground = Color.White;
             }
@@ -233,7 +236,7 @@ namespace RogueTutorial
             {
                 _player.pGlyph = 'T';
             }
-           
+
             if ((_player.iranyPL == 2)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'C';
@@ -242,9 +245,9 @@ namespace RogueTutorial
             {
                 _player.pGlyph = 'S';
             }
-            
-         
-            
+
+
+
             if ((_player.iranyPL == 3)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'E';
@@ -253,7 +256,7 @@ namespace RogueTutorial
             {
                 _player.pGlyph = 'U';
             }
-            
+
             if ((_player.iranyPL == 0)&&((_mapscreen.timeSum%4==1)||(_mapscreen.timeSum%4==2)))
             {
                 _player.pGlyph = 'B';
@@ -262,32 +265,32 @@ namespace RogueTutorial
             {
                 _player.pGlyph = 'R';
             }
-            
+
         }
 
-      
+
 
 
 
         private static void Init()
         {
-            
+
             var fontMaster = SadConsole.Global.LoadFont("Fonts/chess.font");
-     
+
             var bigSizedFont = fontMaster.GetFont(Font.FontSizes.Four);
 
             startingConsole = new Console(Width, Height, bigSizedFont);
             //startingConsole.SetGlyph(3, 3, 4);
-            
+
             _mapscreen = new MapScreen();
             startingConsole.Children.Add(_mapscreen);
 
-            
+
             // Set our new console as the thing to render and process
             SadConsole.Global.CurrentScreen = startingConsole;
             var fontMasterPL = SadConsole.Global.LoadFont("Fonts/chess.font");
             var normalSizedFontPL = fontMasterPL.GetFont(Font.FontSizes.Four);
-            
+
             //váltoZÁS
             // create an instance of player
             _player = new Player();
@@ -301,12 +304,12 @@ namespace RogueTutorial
             // add the player Entity to our only console
             // so it will display on screen
             startingConsole.Children.Add(_player);
-            
+
             _mapscreen.spawnMTest();
         }
-        
-    
-       
-        
+
+
+
+
     }
 }
