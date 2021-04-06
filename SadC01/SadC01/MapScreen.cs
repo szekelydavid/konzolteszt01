@@ -33,9 +33,9 @@ namespace RogueTutorial
         //public List<PlayerLaser> playerLaserList { get; set; }
 
         //HP
-        public int playerLifeCount;
+        public int playerLifeCount { get; set; }
         //ENERGIA
-        public int playerEnergyCount;
+        public int playerEnergyCount { get; set; }
 
         public MapScreen() : base(100, 40)
         {
@@ -90,6 +90,8 @@ namespace RogueTutorial
             //! _____ISMÉTLŐDŐ CIKLUS___
 
             //! idő-számláló kezelése
+            //! _____UPDATEK_______
+
             progressTimer = new Timer(TimeSpan.FromSeconds(0.25));
             progressTimer.TimerElapsed += (timer, e) =>
             {
@@ -115,9 +117,10 @@ namespace RogueTutorial
                         m.phaseChange(beB);
                     }
                 }
-
+                
                 if (timeSum % 4 == 0)
                 {
+                    /*
                     for (int j = 0; j < 9; j++)
                     {
                         for (int i = 0; i < 10; i++)
@@ -125,6 +128,7 @@ namespace RogueTutorial
                         System.Console.Write("\n");
                     }
                     System.Console.Write("\n");
+                    */
                 }
 
                 //! statisztikák aktualizálása
@@ -148,7 +152,8 @@ namespace RogueTutorial
 
             initTheGrids();
 
-
+            //! ________________________DATA
+            //! Player adatok inicaializálása
             playerLifeCount = 4;
             playerEnergyCount = 9;
 

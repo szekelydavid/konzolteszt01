@@ -4,6 +4,8 @@ using Console = SadConsole.Console;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SadC01;
+using System.Linq;
+using SadConsole.Instructions;
 
 namespace RogueTutorial
 {
@@ -19,6 +21,7 @@ namespace RogueTutorial
         
   
         private static Player _player { get; set; }
+        public static int PLvillogkezd { get; set; }
 
         static void Main(string[] args)
         {
@@ -45,12 +48,16 @@ namespace RogueTutorial
         {
             checkPlayerButton();
             PlayerAnim();
+            villogAnim(_mapscreen.timeSum);
+            System.Console.WriteLine("TS:" + _mapscreen.timeSum);
+            
+
             //_mapscreen.animateStars(_mapscreen.animtimer);
 
             //_mapscreen.updateTheGrid();
 
             _mapscreen.renderTheGrid();
-
+            playerHitsMonster();
             //string textToP = "X:" + _player.X + "Y:" + _player.Y;
             //System.Console.WriteLine(textToP);
             /*
@@ -129,7 +136,6 @@ namespace RogueTutorial
 
             }
 
-            
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space)){
 
 
@@ -160,7 +166,31 @@ namespace RogueTutorial
         
         }
 
-        public static void playerLaserGenerate(int bex, int bey, int direction) {
+        public static void playerHitsMonster()
+        {
+            string monstersString = "FVJKL\\M]N";
+            if (monstersString.Contains(_mapscreen.gamegrid[_player.X, _player.Y]))
+                {
+                _mapscreen.removeMonster(_player.X, _player.Y);
+                _mapscreen.playerLifeCount--;
+                System.Console.WriteLine("PL_LIFE: "+_mapscreen.playerLifeCount);
+                PLvillogkezd = _mapscreen.timeSum;
+                System.Console.WriteLine(PLvillogkezd);
+                _player.Animation.CurrentFrame[0].Foreground = Color.IndianRed;
+            }
+        }
+        public static void villogAnim(int INtimesum)
+        {
+            System.Console.WriteLine(INtimesum - PLvillogkezd);
+            if (INtimesum - PLvillogkezd > 8) 
+            {
+                _player.Animation.CurrentFrame[0].Foreground = Color.White;
+            }
+
+        }
+
+
+            public static void playerLaserGenerate(int bex, int bey, int direction) {
 
             int Direction;
             int playerlaserX = 0;

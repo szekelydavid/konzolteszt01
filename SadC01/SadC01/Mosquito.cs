@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework.Media;
 using RogueTutorial;
+using System.Linq;
 
 namespace RogueTutorial
 {
@@ -12,7 +13,7 @@ namespace RogueTutorial
         public int mosquitoY { get; set; }
         public override int monsterX { get; set; }
         public override int monsterY { get; set; }
-        
+
         private char[,] mozgasMinta = new char[9, 10]
         {
             {'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'},
@@ -24,15 +25,16 @@ namespace RogueTutorial
             {'K', 'K', 'K', 'K', 'K', 'K', 'K', 'K', 'K', 'D'},
             {'D', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N'},
             {'X', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'}
-            
-        };   
-        
-        public Mosquito (int bex,int bey) {
+
+        };
+
+        public Mosquito(int bex, int bey)
+        {
             this.monsterX = bex;
             this.monsterY = bey;
             mosquitoX = bex;
             mosquitoY = bey;
-            
+
         }
 
         public override void phaseChange(byte inb)
@@ -47,18 +49,18 @@ namespace RogueTutorial
             {
                 this.actualGlyph = 'V';
             }
-            
+
         }
-        
-        public override char[,]  moveOneStep  (char[,] grid)
+
+        public override char[,] moveOneStep(char[,] grid)
         {
-            
-            actualField = mozgasMinta[this.mosquitoY,this.mosquitoX];
+
+            actualField = mozgasMinta[this.mosquitoY, this.mosquitoX];
             //GameLoop._mapscreen.Print(1, 1, "F");
-            
-            int coorXmoveTo =0;
-            int coorYmoveTo =0;
-            
+
+            int coorXmoveTo = 0;
+            int coorYmoveTo = 0;
+
             if (actualField == 'E')
             {
                 coorXmoveTo = mosquitoX;
@@ -66,7 +68,7 @@ namespace RogueTutorial
             }
             if (actualField == 'K')
             {
-                coorXmoveTo = mosquitoX+1;
+                coorXmoveTo = mosquitoX + 1;
                 coorYmoveTo = mosquitoY;
             }
             if (actualField == 'D')
@@ -76,7 +78,7 @@ namespace RogueTutorial
             }
             if (actualField == 'N')
             {
-                coorXmoveTo = mosquitoX-1;
+                coorXmoveTo = mosquitoX - 1;
                 coorYmoveTo = mosquitoY;
             }
 
@@ -84,7 +86,7 @@ namespace RogueTutorial
             {
                 coorXmoveTo = mosquitoX;
                 coorYmoveTo = mosquitoY;
-                
+
             }
             //grid[8, 8] = actualField;
             //Console.WriteLine(coorXmoveTo.ToString()+" "+coorYmoveTo.ToString());
@@ -92,21 +94,25 @@ namespace RogueTutorial
             {
                 grid[mosquitoX, mosquitoY] = '?';
             }
-            else 
+            else
             {
-                grid[mosquitoX, mosquitoY] = '0';
-                grid[coorXmoveTo, coorYmoveTo] = actualGlyph;
+                string enableToMove = "zjZ0hX";
+                if (enableToMove.Contains(grid[coorXmoveTo, coorYmoveTo]))
+                {
+                    grid[mosquitoX, mosquitoY] = '0';
+                    grid[coorXmoveTo, coorYmoveTo] = actualGlyph;
+
+
+                    this.mosquitoX = coorXmoveTo;
+                    this.mosquitoY = coorYmoveTo;
+
+                    monsterX = mosquitoX;
+                    monsterY = mosquitoY;
+                }
+                
             }
-            
-            
-            this.mosquitoX = coorXmoveTo;
-            this.mosquitoY = coorYmoveTo;
-            
-            monsterX = mosquitoX;
-            monsterY = mosquitoY;
-            
             return grid;
+
         }
-        
     }
 }

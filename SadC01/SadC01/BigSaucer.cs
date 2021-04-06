@@ -84,31 +84,21 @@ namespace SadC01
             }
             string enableToMove = "zjZ0hX";
             //grid[8, 8] = actualField;
+
+
             if (enableToMove.Contains(grid[coorXmoveTo, coorYmoveTo]))
             {
                 grid[bigSaucerX, bigSaucerY] = '0';
-            
+
                 grid[coorXmoveTo, coorYmoveTo] = actualGlyph;
-            
+
                 this.bigSaucerX = coorXmoveTo;
                 this.bigSaucerY = coorYmoveTo;
-            
+
                 monsterX = bigSaucerX;
                 monsterY = bigSaucerY;
             }
-            
-            
-            grid[bigSaucerX, bigSaucerY] = '0';
-            
-            grid[coorXmoveTo, coorYmoveTo] = actualGlyph;
-            
-            this.bigSaucerX = coorXmoveTo;
-            this.bigSaucerY = coorYmoveTo;
-            
-            monsterX = bigSaucerX;
-            monsterY = bigSaucerY;
-            
-            
+
             return grid;
         }
         
