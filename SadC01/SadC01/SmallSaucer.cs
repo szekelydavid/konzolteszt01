@@ -12,8 +12,8 @@ namespace RogueTutorial
         
         public int smallSaucerX { get; set; }
         public int smallSaucerY { get; set; }
-        public int monsterX { get; set; }
-        public int monsterY { get; set; }
+        public override int monsterX { get; set; }
+        public override int monsterY { get; set; }
         
         private char[,] mozgasMinta = new char[9, 10]
         {
@@ -39,7 +39,7 @@ namespace RogueTutorial
 
         public override void phaseChange(byte inb)
         {
-            if (inb == 2)
+            if (inb == 4)
             {
                 this.actualGlyph = 'L';
             }

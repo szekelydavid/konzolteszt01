@@ -28,13 +28,16 @@ namespace RogueTutorial
 
         public override void phaseChange(byte inb)
         {
+            Console.WriteLine(inb);
             if (inb == 4)
             {
+                Console.WriteLine("changeK");
                 this.actualGlyph = 'K';
             }
 
             if (inb == 0)
             {
+                Console.WriteLine("changeJ");
                 this.actualGlyph = 'J';
             }
         }
@@ -52,24 +55,30 @@ namespace RogueTutorial
             if (irany == 0)
             {
                 coorXmoveTo = blobtopusX;
-                coorYmoveTo = blobtopusY - 1;
+                if (blobtopusY - 1 >= 0) { coorYmoveTo = blobtopusY - 1; }
+                else coorYmoveTo = blobtopusY + 1;
             }
 
             if (irany == 1)
             {
-                coorXmoveTo = blobtopusX + 1;
+                if (blobtopusX + 1 < 10) { coorXmoveTo = blobtopusX + 1; }
+                else { coorXmoveTo = blobtopusX - 1; }
+                
                 coorYmoveTo = blobtopusY;
             }
 
             if (irany == 2)
             {
+                if (blobtopusY + 1 < 9) { coorYmoveTo = blobtopusY + 1; }
+                else { coorYmoveTo = blobtopusY - 1; }
                 coorXmoveTo = blobtopusX;
-                coorYmoveTo = blobtopusY + 1;
+                
             }
 
             if (irany == 3)
             {
-                coorXmoveTo = blobtopusX - 1;
+                if (blobtopusX - 1 >= 0) { coorXmoveTo = blobtopusX - 1; }
+                else { coorXmoveTo = blobtopusX + 1; }
                 coorYmoveTo = blobtopusY;
             }
 

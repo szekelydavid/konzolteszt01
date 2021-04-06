@@ -14,8 +14,8 @@ namespace SadC01
         
         public int bigSaucerX { get; set; }
         public int bigSaucerY { get; set; }
-        public int monsterX { get; set; }
-        public int monsterY { get; set; }
+        public override int monsterX { get; set; }
+        public override int monsterY { get; set; }
         
         private char[,] mozgasMinta = new char[9, 10] 
         {
@@ -41,7 +41,7 @@ namespace SadC01
 
         public override void phaseChange(byte inb)
         {
-            if (inb == 2)
+            if (inb == 4)
             {
                 this.actualGlyph = 'M';
             }
@@ -107,6 +107,7 @@ namespace SadC01
             
             monsterX = bigSaucerX;
             monsterY = bigSaucerY;
+            
             
             return grid;
         }

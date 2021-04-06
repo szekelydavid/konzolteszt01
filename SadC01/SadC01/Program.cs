@@ -50,6 +50,7 @@ namespace RogueTutorial
             //_mapscreen.updateTheGrid();
 
             _mapscreen.renderTheGrid();
+
             //string textToP = "X:" + _player.X + "Y:" + _player.Y;
             //System.Console.WriteLine(textToP);
             /*
@@ -134,10 +135,11 @@ namespace RogueTutorial
 
                 System.Console.WriteLine("PLAYER X: " + _player.X.ToString() + "Y: " + _player.Y.ToString());
                 System.Console.WriteLine("irány: " + _player.iranyPL.ToString());
-                PlayerLaser laser = new PlayerLaser(_player.X,_player.Y,_player.iranyPL);
-                
-                _mapscreen.playerLaserGrid=laser.placementToTheGrid(_mapscreen.playerLaserGrid);
-                _mapscreen.playerLaserList.Add(laser);
+                playerLaserGenerate(_player.X, _player.Y, _player.iranyPL);
+                //PlayerLaser laser = new PlayerLaser(_player.X,_player.Y,_player.iranyPL);
+
+                //_mapscreen.playerLaserGrid=laser.placementToTheGrid(_mapscreen.playerLaserGrid);
+                //_mapscreen.playerLaserList.Add(laser);
                 /*
                 Point newPoint=_player.Position + new Point(1, 0);
                 if (!(newPoint.X > 9))
@@ -151,12 +153,44 @@ namespace RogueTutorial
                 
                 _mapscreen.Print(1, 1, _player.Position.Y.ToString());
                 */
-                
-                System.Console.WriteLine("LASER X:"+laser.playerlaserX.ToString()+"Y:"+ laser.playerlaserY.ToString());
-                System.Console.WriteLine("LASER D:" + laser.Direction.ToString());
+
+                //System.Console.WriteLine("LASER X:"+laser.playerlaserX.ToString()+"Y:"+ laser.playerlaserY.ToString());
+                //System.Console.WriteLine("LASER D:" + laser.Direction.ToString());
             } 
         
         }
+
+        public static void playerLaserGenerate(int bex, int bey, int direction) {
+
+            int Direction;
+            int playerlaserX = 0;
+            int playerlaserY = 0;
+
+            playerlaserX = bex;
+            playerlaserY = bey;
+            Direction = direction;
+
+            if (Direction == 0)
+            {
+                bey = bey + 1;
+            }
+            if (Direction == 1)
+            {
+                playerlaserX = bex + 1;
+            }
+            if (Direction == 2)
+            {
+                playerlaserY = bey + 1;
+            }
+            if (Direction == 3)
+            {
+                playerlaserX = bex - 1;
+            }
+            _mapscreen.playerLaserGrid[playerlaserX, playerlaserY] = Direction;
+
+        }
+
+
 
 
         public static void PlayerAnim()
