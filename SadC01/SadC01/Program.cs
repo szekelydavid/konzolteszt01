@@ -49,7 +49,7 @@ namespace RogueTutorial
             checkPlayerButton();
             PlayerAnim();
             villogAnim(_mapscreen.timeSum);
-            System.Console.WriteLine("TS:" + _mapscreen.timeSum);
+            //System.Console.WriteLine("TS:" + _mapscreen.timeSum);
             
 
             //_mapscreen.animateStars(_mapscreen.animtimer);
@@ -139,8 +139,8 @@ namespace RogueTutorial
             if (SadConsole.Global.KeyboardState.IsKeyPressed(Microsoft.Xna.Framework.Input.Keys.Space)){
 
 
-                System.Console.WriteLine("PLAYER X: " + _player.X.ToString() + "Y: " + _player.Y.ToString());
-                System.Console.WriteLine("irány: " + _player.iranyPL.ToString());
+                //System.Console.WriteLine("PLAYER X: " + _player.X.ToString() + "Y: " + _player.Y.ToString());
+                //System.Console.WriteLine("irány: " + _player.iranyPL.ToString());
                 playerLaserGenerate(_player.X, _player.Y, _player.iranyPL);
                 //PlayerLaser laser = new PlayerLaser(_player.X,_player.Y,_player.iranyPL);
 
@@ -175,13 +175,13 @@ namespace RogueTutorial
                 _mapscreen.playerLifeCount--;
                 System.Console.WriteLine("PL_LIFE: "+_mapscreen.playerLifeCount);
                 PLvillogkezd = _mapscreen.timeSum;
-                System.Console.WriteLine(PLvillogkezd);
+               
                 _player.Animation.CurrentFrame[0].Foreground = Color.IndianRed;
             }
         }
         public static void villogAnim(int INtimesum)
         {
-            System.Console.WriteLine(INtimesum - PLvillogkezd);
+            //System.Console.WriteLine(INtimesum - PLvillogkezd);
             if (INtimesum - PLvillogkezd > 8) 
             {
                 _player.Animation.CurrentFrame[0].Foreground = Color.White;

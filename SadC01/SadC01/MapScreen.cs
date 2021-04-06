@@ -539,17 +539,59 @@ namespace RogueTutorial
         public void updateTheStats()
         {
             //statsConsole.Fill(new Rectangle(0, 0, 6, 20), Color.White, Color.Navy, 0, 0);
-            if (playerLifeCount == 4)
-            {
+            //! ÉLETEK | SZÍVECSKÉK
+
+               
+                //! IKoN AZ ELEJÉN
                 this.statsConsole.SetGlyph(1, 0, 'd');
-                this.statsConsole.SetGlyph(2, 0, '4');
-                this.statsConsole.SetGlyph(3, 0, '4');
-                this.statsConsole.SetGlyph(4, 0, '4');
-                this.statsConsole.SetGlyph(5, 0, '4');
+
+            //! SZÍVEK
+            if (playerLifeCount == 0)
+            {
+                this.statsConsole.SetGlyph(2, 0, '8', Color.White, Color.Black);
+                this.statsConsole.SetGlyph(3, 0, '0', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
+                this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
+
             }
-            this.statsConsole.SetForeground(0, 0, Color.White);
+            if (playerLifeCount == 1) 
+                { 
+                    this.statsConsole.SetGlyph(2, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(3, 0, '0', Color.Black, Color.Black);
+                    this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
+                    this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
+                    
+                }
+                if (playerLifeCount == 2)
+                {
+                    this.statsConsole.SetGlyph(2, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(3, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(4, 0, '0', Color.Black, Color.Black);
+                    this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
 
+                }
+                if (playerLifeCount == 3)
+                {
+                    this.statsConsole.SetGlyph(2, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(3, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(4, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(5, 0, '0', Color.Black, Color.Black);
 
+                }
+                if (playerLifeCount == 4)
+                {
+                    this.statsConsole.SetGlyph(2, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(3, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(4, 0, '4', Color.White, Color.Black);
+                    this.statsConsole.SetGlyph(5, 0, '4', Color.White, Color.Black);
+
+                }
+           
+                
+            
+            //this.statsConsole.SetForeground(0, 0, Color.White);
+
+            //! ENERGIA | 
             this.statsConsole.SetGlyph(1, 2, '2');
             this.statsConsole.SetGlyph(2, 2, '>');
             this.statsConsole.SetGlyph(3, 2, '>');
