@@ -141,9 +141,11 @@ namespace RogueTutorial
 
                 //System.Console.WriteLine("PLAYER X: " + _player.X.ToString() + "Y: " + _player.Y.ToString());
                 //System.Console.WriteLine("irány: " + _player.iranyPL.ToString());
-                playerLaserGenerate(_player.X, _player.Y, _player.iranyPL);
-
-                _mapscreen.playerEnergyCount--;
+                if (_mapscreen.playerEnergyCount > 0)
+                {
+                    playerLaserGenerate(_player.X, _player.Y, _player.iranyPL);
+                    _mapscreen.playerEnergyCount--;
+                }
 
                 //PlayerLaser laser = new PlayerLaser(_player.X,_player.Y,_player.iranyPL);
 
@@ -205,19 +207,19 @@ namespace RogueTutorial
 
             if (Direction == 0)
             {
-                bey = bey + 1;
+                if ((bey ) >= 1) { playerlaserY = bey - 1; }
             }
             if (Direction == 1)
             {
-                playerlaserX = bex + 1;
+                if ((bex) <= 8) { playerlaserX = bex + 1; }
             }
             if (Direction == 2)
             {
-                playerlaserY = bey + 1;
+                if ((bey) <= 7) { playerlaserY = bey + 1; }
             }
             if (Direction == 3)
             {
-                playerlaserX = bex - 1;
+                if ((bex ) >= 1) { playerlaserX = bex - 1; }
             }
             _mapscreen.playerLaserGrid[playerlaserX, playerlaserY] = Direction;
 
