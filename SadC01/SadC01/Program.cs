@@ -20,7 +20,7 @@ namespace RogueTutorial
         public static Console startingConsole;
 
 
-        private static Player _player { get; set; }
+        public static Player _player { get; set; }
         public static int PLvillogkezd { get; set; }
 
         static void Main(string[] args)
@@ -49,6 +49,10 @@ namespace RogueTutorial
             checkPlayerButton();
             PlayerAnim();
             villogAnim(_mapscreen.timeSum);
+
+            //! Átadja a játékos koordinátákat a mapscreennek
+            _player.X = _mapscreen.localMSPlayerX;
+            _player.Y = _mapscreen.localMSPlayerY;
             //System.Console.WriteLine("TS:" + _mapscreen.timeSum);
 
 

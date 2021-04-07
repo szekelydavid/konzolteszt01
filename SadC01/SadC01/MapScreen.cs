@@ -20,6 +20,7 @@ namespace RogueTutorial
         public SadConsole.ScrollingConsole statsConsole;
         public SadConsole.ScrollingConsole playerLaserConsole;
         public SadConsole.ScrollingConsole scoreConsole;
+        public SadConsole.ScrollingConsole msglogConsole;
         //public SadConsole.Font normalSizedFont = SadConsole.Global.LoadFont("Fonts/CustomTile.font.json").GetFont(SadConsole.Font.FontSizes.One);
         public int timeSum { get; set; }
         public int animtimer { get; set; }
@@ -39,6 +40,8 @@ namespace RogueTutorial
         public int playerEnergyCount { get; set; }
         //! PLAYER SCORE
         public int playerScore { get; set; }
+        public int localMSPlayerX { get; set; }
+        public int localMSPlayerY { get; set; }
         public MapScreen() : base(100, 40)
         {
             //! Számláló nullázása
@@ -100,7 +103,14 @@ namespace RogueTutorial
             statsConsole.Children.Add(scoreConsole);
             scoreConsole.Print(0, 0, "  SCORE:");
 
-
+            //! MESSAGE LOG CONSOLE
+            var msglogConsole = new Console(14, 2, doublesizedfontIBM)
+            {
+                DefaultBackground = Color.Black,
+                DefaultForeground = Color.Gray,
+            };
+            msglogConsole.Position = new Point(5, 18);
+            mapConsole.Children.Add(msglogConsole);
 
             //! _____ISMÉTLŐDŐ CIKLUS___
 
@@ -110,6 +120,7 @@ namespace RogueTutorial
             progressTimer = new Timer(TimeSpan.FromSeconds(0.25));
             progressTimer.TimerElapsed += (timer, e) =>
             {
+                msglogConsole.Print(1, 1, "haho");
                 timeSum++;
                 updateTheGridLasers();
                 scoreConsole.Print(0, 1, "  " + playerScore.ToString());
@@ -153,10 +164,24 @@ namespace RogueTutorial
                 animtimer = (animtimer % 80);
                 animtimer++;
 
+                //!___monsterspawningSUPERSTAR
+
+
+
+
+
             };
             Components.Add(progressTimer);
             //gridConsole.SetGlyph(5, 5, 'F');
 
+            //!Valoszinuseg szamlalo
+             bool valszamDobas(int x)
+            {
+                Random rnd = new Random();
+                int dobott = rnd.Next(1, x + 1);
+                if (x == dobott) { return true; }
+                else { return false; }
+            }
 
             //! ___LISTÁK INICIALIZÁLÁSA___
             monsterList = new List<Monster>();
@@ -178,11 +203,10 @@ namespace RogueTutorial
             //! PONTSZÁM 🎖️
             playerScore = 0;
 
-            //! ________________________DATA
-            //! Player adatok inicaializálása ÉLET|ENERGIA  ❤️ ⚡
+            //!
 
             // ! TESZT
-            playerLaserGrid[4, 4] = 3;
+            //playerLaserGrid[4, 4] = 3;
 
 
         }
@@ -191,41 +215,67 @@ namespace RogueTutorial
         public void spawnBlobptosaurus()
         {
             Random rnd = new Random();
-            int blX = rnd.Next(1, 9);
-            int blY = rnd.Next(1, 8);
-            var m = new Blobtopus(blX, blY);
-            gamegrid[blX, blY] = 'J';
-            monsterList.Add(m);
+
+            for (int i = 0; i < 5; i++)
+            {
+                int blX = rnd.Next(1, 9);
+                int blY = rnd.Next(1, 8);
+                if (playerdistanceValidator(blX, blY) == true)
+                {
+                    var m = new Blobtopus(blX, blY);
+                    gamegrid[blX, blY] = 'J';
+                    monsterList.Add(m);
+
+                    return;
+                }
+            }
         }
 
         public void spawnMosquito()
         {
             Random rnd = new Random();
-            int mosqX = rnd.Next(0, 10);
-            int mosqY = rnd.Next(0, 3);
-            var m = new Mosquito(mosqX, mosqY);
-            gamegrid[mosqX, mosqY] = 'F';
-            monsterList.Add(m);
+
+            for (int i = 0; i < 5; i++)
+            {
+                int mosqX = rnd.Next(0, 10);
+                int mosqY = rnd.Next(0, 3);
+
+                if (playerdistanceValidator(mosqX, mosqY) == true)
+                {
+                    var m = new Mosquito(mosqX, mosqY);
+                    gamegrid[mosqX, mosqY] = 'F';
+                    monsterList.Add(m);
+                    return;
+                }
+            }
         }
 
         public void spawnSmallSaucer()
         {
             Random rnd = new Random();
+
             int smallSX;
             int smallSY;
-            int fennORlenn = rnd.Next(0, 2);
-            smallSX = rnd.Next(0, 10);
-            if (fennORlenn == 0)
+            for (int i = 0; i < 5; i++)
             {
-                smallSY = rnd.Next(0, 3);
+                int fennORlenn = rnd.Next(0, 2);
+                smallSX = rnd.Next(0, 10);
+                if (fennORlenn == 0)
+                {
+                    smallSY = rnd.Next(0, 3);
+                }
+                else
+                {
+                    smallSY = rnd.Next(7, 9);
+                }
+                if (playerdistanceValidator(smallSX, smallSY) == true)
+                {
+                    var m = new SmallSaucer(smallSX, smallSY);
+                    gamegrid[smallSX, smallSY] = 'L';
+                    monsterList.Add(m);
+                    return;
+                }
             }
-            else
-            {
-                smallSY = rnd.Next(7, 9);
-            }
-            var m = new SmallSaucer(smallSX, smallSY);
-            gamegrid[smallSX, smallSY] = 'L';
-            monsterList.Add(m);
         }
 
         public void spawnBigSaucer()
@@ -233,22 +283,44 @@ namespace RogueTutorial
             Random rnd = new Random();
             int BigSX;
             int BigSY;
-            int fennORlenn = rnd.Next(0, 2);
-            BigSX = rnd.Next(0, 10);
-            if (fennORlenn == 0)
+            for (int i = 0; i < 5; i++)
             {
-                BigSY = rnd.Next(0, 3);
+
+
+                int fennORlenn = rnd.Next(0, 2);
+                BigSX = rnd.Next(0, 10);
+                if (fennORlenn == 0)
+                {
+                    BigSY = rnd.Next(0, 3);
+                }
+                else
+                {
+                    BigSY = rnd.Next(7, 9);
+                }
+                if (playerdistanceValidator(BigSX, BigSY) == true)
+                {
+                    var m = new BigSaucer(BigSX, BigSY);
+                    gamegrid[BigSX, BigSY] = 'M';
+                    monsterList.Add(m);
+                    return;
+                }
             }
-            else
-            {
-                BigSY = rnd.Next(7, 9);
-            }
-            var m = new BigSaucer(BigSX, BigSY);
-            gamegrid[BigSX, BigSY] = 'M';
-            monsterList.Add(m);
+
         }
         //! _________________________________
 
+        public bool playerdistanceValidator(int mSPx, int mSPy)
+        {
+            if ((localMSPlayerX - 1 <= mSPx) && (localMSPlayerX + 1 >= mSPx))
+                {
+                return false;
+                }
+            if ((localMSPlayerY - 1 <= mSPy) && (localMSPlayerY + 1 >= mSPy))
+            {
+                return false;
+            }
+            return true;
+        }
 
 
         public void spawnMTest()
