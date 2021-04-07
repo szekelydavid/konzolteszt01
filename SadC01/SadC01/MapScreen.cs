@@ -19,6 +19,7 @@ namespace RogueTutorial
         public SadConsole.ScrollingConsole gridConsole;
         public SadConsole.ScrollingConsole statsConsole;
         public SadConsole.ScrollingConsole playerLaserConsole;
+        public SadConsole.ScrollingConsole scoreConsole;
         //public SadConsole.Font normalSizedFont = SadConsole.Global.LoadFont("Fonts/CustomTile.font.json").GetFont(SadConsole.Font.FontSizes.One);
         public int timeSum { get; set; }
         public int animtimer { get; set; }
@@ -98,7 +99,7 @@ namespace RogueTutorial
             scoreConsole.Position = new Point(2, 5);
             statsConsole.Children.Add(scoreConsole);
             scoreConsole.Print(0, 0, "  SCORE:");
-            scoreConsole.Print(0, 1,"  "+ playerScore.ToString());
+
 
 
             //! _____ISMÉTLŐDŐ CIKLUS___
@@ -111,6 +112,7 @@ namespace RogueTutorial
             {
                 timeSum++;
                 updateTheGridLasers();
+                scoreConsole.Print(0, 1, "  " + playerScore.ToString());
                 //BÓnuszok animációja
                 foreach (Bonus b in bonusList)
                 {
@@ -535,9 +537,14 @@ namespace RogueTutorial
                     this.playerLaserConsole.SetBackground(i, j, Color.Transparent);
                     if (this.playerLaserGrid[i, j] == 9)
                     {
-                        this.playerLaserConsole.SetGlyph(i, j, ':');
+                        this.playerLaserConsole.SetGlyph(i, j, 'O');
                         this.playerLaserConsole.SetForeground(i, j, Color.White);
                         this.playerLaserConsole.SetBackground(i, j, Color.Transparent);
+                        if ((i == 0) && (j == 0)) { this.playerLaserConsole.SetGlyph(0, 0, 'k'); }
+                        if ((i == 9) && (j == 0)) { this.playerLaserConsole.SetGlyph(9, 0, 'm'); }
+                        if ((i == 9) && (j == 8)) { this.playerLaserConsole.SetGlyph(9, 8, 'o'); }
+                        if ((i == 0) && (j == 8)) { this.playerLaserConsole.SetGlyph(0, 8, 'i'); }
+
                     }
                     if (this.playerLaserGrid[i, j] != 9)
                     {
@@ -545,6 +552,7 @@ namespace RogueTutorial
                         this.playerLaserConsole.SetForeground(i, j, Color.White);
                         this.playerLaserConsole.SetBackground(i, j, Color.Transparent);
                     }
+
                 }
             }
         }

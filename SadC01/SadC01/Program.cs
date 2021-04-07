@@ -178,6 +178,7 @@ namespace RogueTutorial
                 {
                 _mapscreen.removeMonster(_player.X, _player.Y);
                 _mapscreen.playerLifeCount--;
+                //! TESZT
                 System.Console.WriteLine("PL_LIFE: "+_mapscreen.playerLifeCount);
                 PLvillogkezd = _mapscreen.timeSum;
 
